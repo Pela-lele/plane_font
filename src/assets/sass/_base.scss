@@ -1,0 +1,14 @@
+@mixin wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    .header {
+      position: fixed;
+      top: 0;
+      height: 5rem;
+      text-align: center;
+    }
+    .main{
+          margin-top: 4rem;
+    }
+}

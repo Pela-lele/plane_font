@@ -5,6 +5,7 @@ import Hello from '@/components/Hello'
 
 import index from '@/pages/index'
 import fxbb from '@/pages/fxbb'
+import map from '@/pages/map'
 
 Vue.use(Router)
 
@@ -16,8 +17,12 @@ export default new Router({
       component: index
     },{
     	path: '/fxbb',
-      	name: 'fxbb',
-      	component: fxbb
+    	name: 'fxbb',
+    	component: fxbb
+    },{
+      path: '/map',
+      name: 'map',
+      component: map
     }
   ]
 })
