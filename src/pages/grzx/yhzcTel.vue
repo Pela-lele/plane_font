@@ -3,7 +3,7 @@
   <div class="wrapper">
     <div class="input-info">
       <div class="info-list">
-        <i class="iconfont icon-shouji icon-style"></i>
+        <i class="iconfont icon-shouji icon-style" style="font-weight: bold"></i>
         <div class="text-info">
           <input placeholder="请输入手机号">
         </div>
@@ -15,6 +15,11 @@
           <input placeholder="请输入验证码">
         </div>
       </div>
+      <router-link :to="{path:'/yhzcType'}" tag="div">
+        <div class="tel-valid">
+          <span class="valid">下一步</span>
+        </div>
+      </router-link>
 
 
     </div>
@@ -37,10 +42,11 @@
         border-bottom: 1px solid $border-color;
         .icon-style{
           color: $theme-color;
-          height: 32px;
+          height: 50px;
           font-size: 32px;
           width: 50px;
           line-height: 50px;
+          text-align: center;
         }
         .text-info {
           flex: 1;

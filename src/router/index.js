@@ -8,8 +8,8 @@ import fxbb from '@/pages/fxbb'
 import grxx from '@/pages/grzx/grxx'
 import map from '@/pages/map'
 import yhzcTel from '@/pages/grzx/yhzcTel'
-import yhzcCode from '@/pages/grzx/yhzcCode'
 import yhzcType from '@/pages/grzx/yhzcType'
+import yhzcPerson from '@/pages/grzx/yhzcPerson'
 
 Vue.use(Router)
 
@@ -36,13 +36,13 @@ export default new Router({
       name: 'yhzcTel',
       component: yhzcTel
     },{
-      path: '/yhzcCode',
-      name: 'yhzcCode',
-      component: yhzcCode
-    },{
       path: '/yhzcType',
       name: 'yhzcType',
       component: yhzcType
+    },{
+      path: '/yhzcPerson',
+      name: 'yhzcPerson',
+      component: yhzcPerson
     }
 
   ]
