@@ -10,7 +10,9 @@ import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
 import './assets/font/iconfont.css'
+import './assets/sass/_base.scss'
 
+import utils from './utils/utils'
 
 Vue.use(MintUI)
 Vue.config.productionTip = false

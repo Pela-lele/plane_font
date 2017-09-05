@@ -11,16 +11,6 @@ export default {
 </script>
 
 <style>
-html{
-  font-size: 62.5%;
- 
-}
-html,body{
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,6 +22,7 @@ html,body{
   height: 100%;
   overflow: auto;
   background-color: #F4F4F4;
+  font-size: 1.4rem
 }
 ::-webkit-scrollbar {
     width: 2px;
