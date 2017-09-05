@@ -9,6 +9,7 @@ import router from './router'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
+import './assets/font/iconfont.css'
 
 
 Vue.use(MintUI)
