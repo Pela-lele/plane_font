@@ -6,6 +6,7 @@ import Hello from '@/components/Hello'
 import index from '@/pages/index'
 import fxbb from '@/pages/fxbb'
 import grxx from '@/pages/grxx'
+import map from '@/pages/map'
 
 Vue.use(Router)
 
@@ -23,6 +24,10 @@ export default new Router({
       path: '/grxx',
       name: 'grxx',
       component: grxx
+    },{
+      path: '/map',
+      name: 'map',
+      component: map
     }
   ]
 })
