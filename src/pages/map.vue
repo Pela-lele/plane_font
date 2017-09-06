@@ -2,7 +2,7 @@
 
 <template>
 	<div class="map-content">
-		<BMap></BMap>
+		<BMap :showRange="false"></BMap>
 	</div>
 	
 </template>

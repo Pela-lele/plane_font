@@ -30,7 +30,7 @@ export default new Router({
       name: 'grxx',
       component: grxx
     },{
-      path: '/map',
+      path: '/map/:type',
       name: 'map',
       component: map
     },{

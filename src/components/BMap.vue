@@ -8,8 +8,7 @@
 			<p class="legend-item"><i class="legend-item-icon forbid"></i>禁飞</p>
 			<p class="legend-item"><i class="legend-item-icon limit"></i>限飞</p>
 		</div>
-		<div class="map-range" :class="{showPicker:isShowpicker}">
-		<!--  visibleItemCount="3" -->
+		<div class="map-range" :class="{showPicker:isShowpicker}" v-if="showRange">
 			<div class="toolbar" @click="togglePicker">
 				<i class="iconfont" :class="{'icon-unfold':isShowpicker,'icon-packup':!isShowpicker}"></i>
 				飞行范围：{{range}}
@@ -34,17 +33,26 @@
 			    }],
 			    isShowpicker: false,
 			    map: null,
+			    overlays:{
+			    	marker: null,
+			    	circle: null,
+			    	startMarker: null,
+			    	endMarker: null
+			    },
 			    marker: null,
-			    circle: null
+			    circle: null,
+			    pageType: "area"//页面功能，起始点、结束点、划区域
 			}
 		},
+		props:["showRange"],
 		methods: {
 			onRangeChange(picker, values) {
 				if(values[0]){
+					console.log("onRangeChange")
 					var range = this.range = values[0];
-					this.map.removeOverlay(this.circle)
+					// this.map.removeOverlay(this.circle)
 					this.circle.setRadius(range);
-					this.map.addOverlay(this.circle);
+					// this.map.addOverlay(this.circle);
 					this.refreshZoom();
 				}
 			},
@@ -60,7 +68,7 @@
 				],{
 					fillColor:"#ff8f00",
 					strokeWeight:1,
-					fillOpacity:0.3,
+					fillOpacity:0.5,
 					strokeOpacity:0.3
 				});
 				limitPolygon.disableMassClear();
@@ -75,7 +83,7 @@
 				],{
 					fillColor:"#f44336",
 					strokeWeight:1,
-					fillOpacity:0.3,
+					fillOpacity:0.5,
 					strokeOpacity:0.3
 				});
 				forbidPolygon.disableMassClear();
@@ -89,16 +97,22 @@
 				var ul = cirBounds.ul;
 				var _m = map.getViewport([Ll,ul]);
 				// console.log(cirBounds,_m)
-				map.setZoom(_m.zoom);
+				map.setZoom(_m.zoom-1);
 				map.panTo(_m.center);
+			},
+			initOverlays() {
+				
 			}
 		},
 		mounted() {
 			var self = this;
+			var type = this.pageType = this.$route.params.type;
 			var map = this.map = new BMap.Map("bdmap");
 			map.centerAndZoom(new BMap.Point(115.404, 32.915), 5);
 			this.addLimitArea();
 			this.addForbidArea();
+
+			this.initOverlays();
 			var geolocation = new BMap.Geolocation();
 			geolocation.getCurrentPosition(function(res){
 				console.log(res)
@@ -116,19 +130,22 @@
 					map.addOverlay(marker);  
 
 					//地图画圈
-					var circle = self.circle = new BMap.Circle(point,300,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+					var circle = self.circle = new BMap.Circle(point,self.range,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
 					map.addOverlay(circle);
+
 					self.refreshZoom();
-					marker.addEventListener("dragstart",function(){
+
+					marker.addEventListener("dragstart",function(e){
 						map.removeOverlay(circle);
+						self.addLimitArea()
+						self.addForbidArea()
 					});
 					
 					marker.addEventListener("dragend",function(){
 						var point = this.getPosition();
 						circle.setCenter(point);
 						map.addOverlay(circle);
-						// self.addLimitArea();
-						self.refreshZoom()
+						// self.refreshZoom()
 					});
 				}else{
 

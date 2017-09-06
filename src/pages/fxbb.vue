@@ -48,12 +48,14 @@
 	    	<label>飞行区域</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map'}" tag="li" class="selection">
+	       		<keep-alive>
+	       		<router-link :to="{path:'/map/area'}" tag="li" class="selection">
 	       			<div class="input-box">
 	       				<span>秦淮区夫子庙</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
 	       		</router-link>
+	       		</keep-alive>
 	       		<!-- </li> -->
 	       	</ul>
 	    </div>
@@ -61,12 +63,14 @@
 	    	<label>起飞点</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map'}" tag="li" class="selection">
+	       		<keep-alive>
+	       		<router-link :to="{path:'/map/start'}" tag="li" class="selection">
 	       			<div class="input-box">
 	       				<span>秦淮区夫子庙</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
 	       		</router-link>
+	       	</keep-alive>
 	       		<!-- </li> -->
 	       	</ul>
 	    </div>
@@ -74,7 +78,7 @@
 	    	<label>降落点</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map'}" tag="li" class="selection">
+	       		<router-link :to="{path:'/map/end'}" tag="li" class="selection">
 	       			<div class="input-box">
 	       				<span>秦淮区夫子庙</span>
 	       				<i class="iconfont icon-coordinates"></i>
@@ -133,6 +137,9 @@
 	       		</li>
 	       	</ul>
 	    </div>
+	    <div class="footer">
+	    	<a @click="submitForm" class="sumitBtn">提交</a>
+	    </div>
 		<mt-datetime-picker 
 			ref="endTimePicker" 
 			type="datetime" 
@@ -176,7 +183,14 @@
 			handleStartTimepicker(date) {
 				var str = date.Format("YYYY-MM-DD hh:mm");
 				this.startTime = str;
+			},
+			submitForm() {
+				this.$router.replace("/")
 			}
+		},
+		beforeRouteEnter(to, from, next) {
+			console.log(to, from)
+			next();
 		}
 	}
 </script>
@@ -245,7 +259,22 @@
 				}
 			}	
 		}	
-			
+		.footer{
+			background: #fff;
+    		padding: 20px 0;
+    		.sumitBtn{
+				width: 150px;
+				height: 50px;
+				line-height: 50px;
+				background: #2196f3;
+				color: #fff;
+				display: block;
+				text-align: center;
+				font-size: 18px;
+				border-radius: 10px;
+				margin: 0 auto;
+    		}
+		}	
 		
 	}
 </style>
