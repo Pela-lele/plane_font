@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="wrapper">
 		<div id="bdmap">
 			
 		</div>
@@ -21,50 +21,131 @@
 </template>
 
 <script>
+	import planeIcon from '../assets/img/icon-plane.png'
 	export default {
 		data(){
 			return {
-				range: "100",
+				range: "300",
 				rangeSlot: [{
 					flex: 1,
 					values: ['100', '300', '500', '1000', '2000', '3000'],
 					className: 'slot1',
 					textAlign: 'center'
 			    }],
-			    isShowpicker: false
+			    isShowpicker: false,
+			    map: null,
+			    marker: null,
+			    circle: null
 			}
 		},
 		methods: {
 			onRangeChange(picker, values) {
-				this.range = values[0];
+				if(values[0]){
+					var range = this.range = values[0];
+					this.map.removeOverlay(this.circle)
+					this.circle.setRadius(range);
+					this.map.addOverlay(this.circle);
+					this.refreshZoom();
+				}
 			},
 			togglePicker() {
 				this.isShowpicker = !this.isShowpicker;
+			},
+			//限飞区
+			addLimitArea() {
+				var limitPolygon = new BMap.Polygon([
+					new BMap.Point(118.77807441, 32.09923550),
+			        new BMap.Point(118.79817441, 32.05723750),
+			        new BMap.Point(118.87809441, 32.0623550)
+				],{
+					fillColor:"#ff8f00",
+					strokeWeight:1,
+					fillOpacity:0.3,
+					strokeOpacity:0.3
+				});
+				limitPolygon.disableMassClear();
+				this.map.addOverlay(limitPolygon);
+			},
+			//禁飞区
+			addForbidArea() {
+				var forbidPolygon = new BMap.Polygon([
+					new BMap.Point(118.97807441, 32.06923550),
+			        new BMap.Point(118.75817441, 32.05923750),
+			        new BMap.Point(118.87809441, 32.0923550)
+				],{
+					fillColor:"#f44336",
+					strokeWeight:1,
+					fillOpacity:0.3,
+					strokeOpacity:0.3
+				});
+				forbidPolygon.disableMassClear();
+				this.map.addOverlay(forbidPolygon);
+
+			},
+			refreshZoom() {
+				var map = this.map;
+				var cirBounds = this.circle.getBounds();
+				var Ll = cirBounds.Ll;
+				var ul = cirBounds.ul;
+				var _m = map.getViewport([Ll,ul]);
+				// console.log(cirBounds,_m)
+				map.setZoom(_m.zoom);
+				map.panTo(_m.center);
 			}
 		},
 		mounted() {
-			var map =new BMap.Map("bdmap");
-			var point = new BMap.Point(115.404, 32.915);
-			map.centerAndZoom(point, 10);
+			var self = this;
+			var map = this.map = new BMap.Map("bdmap");
+			map.centerAndZoom(new BMap.Point(115.404, 32.915), 5);
+			this.addLimitArea();
+			this.addForbidArea();
+			var geolocation = new BMap.Geolocation();
+			geolocation.getCurrentPosition(function(res){
+				console.log(res)
+				if(this.getStatus() == "0" && res.point){
+					var longitude = res.point.longitude;
+					var latitude = res.point.latitude;
+					var point = res.point;
+					map.setZoom(13);
+					map.panTo(point);
+					//地图标点
+					var point_icon = new BMap.Icon(planeIcon, new BMap.Size(32,32));
+					var marker = self.marker = new BMap.Marker(point);
+					marker.setIcon(point_icon);
+					marker.enableDragging();
+					map.addOverlay(marker);  
 
-			var pt = new BMap.Point(116.417, 39.909);
-			// var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
-			var marker = new BMap.Marker(point/*,{
-				offset: new BMap.size(10,10)
-			}*/);  // 创建标注
-			map.addOverlay(marker);  
-			marker.enableDragging();
-			marker.setOffset(new BMap.Size(0, 10))
+					//地图画圈
+					var circle = self.circle = new BMap.Circle(point,300,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+					map.addOverlay(circle);
+					self.refreshZoom();
+					marker.addEventListener("dragstart",function(){
+						map.removeOverlay(circle);
+					});
+					
+					marker.addEventListener("dragend",function(){
+						var point = this.getPosition();
+						circle.setCenter(point);
+						map.addOverlay(circle);
+						// self.addLimitArea();
+						self.refreshZoom()
+					});
+				}else{
 
-			// var circle = new BMap.Circle(point,10000);
-			var circle = new BMap.Circle(point,10000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-			map.addOverlay(circle);  
+				}
+			},{enableHighAccuracy: true})  
 		}
 	}
 </script>
 
 <style scoped lang="scss">
 	@import '../assets/sass/_base.scss';
+	.wrapper{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+	}
 	#bdmap{
 		position: absolute;
 		top: 0;
@@ -108,6 +189,7 @@
 		width: 100%;
 		bottom: -108px;
 		background-color: #fff;
+		transition: all .5s;
 		&.showPicker{
 			bottom: 0px;
 		}

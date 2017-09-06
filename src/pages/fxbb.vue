@@ -4,24 +4,21 @@
     	<!-- <mt-header fixed title="无人机"></mt-header> -->
     	<div class="group">
     		<label>飞行证书</label>
-    		<ul class="selection-list">
+    		<!-- <ul class="selection-list"> -->
+    		<router-link :to="{path:'/fxzsList'}" tag="ul" class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>CHINA-BDKICHINA</span>
-	       			</div>
-	       			
-	       		</li>
-	       		<li class="selection">
-	       			<div class="input-box">
-	       				<span>CHINA-BDKICHINA</span>
+	       				<!-- <span>CHINA-BDKICHINA</span> -->
 	       			</div>
 	       			<i class="iconfont icon-add"></i>
 	       		</li>
-	       	</ul>
+	       	</router-link>
+	       	<!-- </ul> -->
 	    </div>
 	    <div class="group">
     		<label>无人机型号</label>
-    		<ul class="selection-list">
+    		<!-- <ul class="selection-list"> -->
+    		<router-link :to="{path:'/wrjxhList'}" tag="ul" class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
 	       				<span>CHINA-BDKICHINA</span>
@@ -34,7 +31,8 @@
 	       			</div>
 	       			<i class="iconfont icon-add"></i>
 	       		</li>
-	       	</ul>
+	       	</router-link>
+	       	<!-- </ul> -->
 	    </div>
 	    <div class="group">
 	    	<label>架数</label>
@@ -130,7 +128,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入联系电话"/>
+	       				<input type="text" placeholder="请输入联系电话" v-model="formData.phone"/>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -158,7 +156,10 @@
 				startPickerValue: new Date(),
 				endPickerValue: new Date(),
 				startTime:"",
-				endTime:""
+				endTime:"",
+				formData:{
+					phone:""
+				}
 			}
 		},
 		methods: {
@@ -189,9 +190,6 @@
 			border-width: 0 0 1px 0;
 			border-style: solid;
 			border-color: $border-color;
-			/* &.modules{
-				
-			} */
 			label{
 				vertical-align: middle;
 				width: 30%;
@@ -200,11 +198,13 @@
 				box-align:center;
 				align-items: center; */
 				padding-left: 8px;
+				text-align: center;
 			}
 			.selection-list{
 				display: flex;
 				flex:1;
 				flex-flow:column;
+				padding-left: 20px;
 				.selection{
 					width: 100%;
 					height: 48px;
@@ -217,10 +217,11 @@
 						padding-right: 20px;
 						height: 48px;
 						line-height: 48px;
-						color: #6e6a6a;
+						color: $theme-color;
+						// color: #6e6a6a;
 						&>*{
-							color: #6e6a6a;
-							// font-size: 1.2rem;
+							// color: #6e6a6a;
+							color: $theme-color;
 							border: 0 none;
 						}
 						input{
