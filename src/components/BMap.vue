@@ -8,9 +8,13 @@
 			<p class="legend-item"><i class="legend-item-icon forbid"></i>禁飞</p>
 			<p class="legend-item"><i class="legend-item-icon limit"></i>限飞</p>
 		</div>
-		<div class="map-range">
+		<div class="map-range" :class="{showPicker:isShowpicker}">
 		<!--  visibleItemCount="3" -->
-			<mt-picker :slots="rangeData" @change="onRangeChange"></mt-picker>
+			<div class="toolbar" @click="togglePicker">
+				<i class="iconfont" :class="{'icon-unfold':isShowpicker,'icon-packup':!isShowpicker}"></i>
+				飞行范围：{{range}}
+			</div>
+			<mt-picker :slots="rangeSlot" @change="onRangeChange" :visible-item-count="3"></mt-picker>
 		</div>
 	</div>
 	
@@ -20,30 +24,23 @@
 	export default {
 		data(){
 			return {
-				rangeData:[
-					{
-			          flex: 1,
-			          values: ['100', '300', '500', '1000', '2000', '3000'],
-			          className: 'range-picker',
-			          textAlign: 'center',
-			          defaultIndex: 1
-			        }
-				]
+				range: "100",
+				rangeSlot: [{
+					flex: 1,
+					values: ['100', '300', '500', '1000', '2000', '3000'],
+					className: 'slot1',
+					textAlign: 'center'
+			    }],
+			    isShowpicker: false
 			}
 		},
 		methods: {
 			onRangeChange(picker, values) {
-				// console.log(this)
-				if(values){
-
-				}else{
-
-				}
-				console.log(values)
+				this.range = values[0];
+			},
+			togglePicker() {
+				this.isShowpicker = !this.isShowpicker;
 			}
-		},
-		props:{
-			// 地图在该视图上的高度
 		},
 		mounted() {
 			var map =new BMap.Map("bdmap");
@@ -109,14 +106,21 @@
 	.map-range{
 		position: absolute;
 		width: 100%;
-		bottom: 0;
+		bottom: -108px;
 		background-color: #fff;
-		.range-picker{
-			.picker-item{
-				color: $grey-color;
-			}
-			.picker-selected{
-				color: red;
+		&.showPicker{
+			bottom: 0px;
+		}
+		.toolbar{
+			text-align: center;
+			height: 40px;
+			line-height: 40px;
+			border-bottom: 1px solid $border-color;
+			border-top: 1px solid $border-color;
+			color: $theme-color;
+			.iconfont{
+				font-size: 20px;
+				vertical-align: middle;
 			}
 		}
 	}
