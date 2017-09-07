@@ -23,7 +23,7 @@
           <router-link :to="{path:'/yhzcTel'}" tag="span">
             <span class="text-style">用户注册</span>
           </router-link>
-          <router-link :to="{path:'/yhzcTel'}" tag="span">
+          <router-link :to="{path:'/yhzcPwd'}" tag="span">
             <span class="text-style">忘记密码？</span>
           </router-link>
         </div>

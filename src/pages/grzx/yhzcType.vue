@@ -10,9 +10,11 @@
           </div>
         </router-link>
 
-        <div class="comm-user">企业用户
-          <i class="icon-enter iconfont icon-style"></i>
-        </div>
+        <router-link :to="{path:'/yhzcCompany'}" tag="div">
+          <div class="comm-user">企业用户
+            <i class="icon-enter iconfont icon-style"></i>
+          </div>
+        </router-link>
       </div>
     </div>
 
@@ -35,6 +37,7 @@
         height: 50px;
         line-height: 50px;
         padding-left: 40px;
+        border-bottom: 1px solid $border-color;
       }
       .icon-style{
         color: $theme-color;

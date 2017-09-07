@@ -1,22 +1,12 @@
 <template>
-  <!--个人注册信息填写-->
+  <!--单位用户注册信息填写-->
   <div class="wrapper">
     <div class="group">
-      <label>姓名</label>
+      <label>负责人</label>
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            <input type="text" placeholder="请输入姓名"/>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="group">
-      <label>身份证号</label>
-      <ul class="selection-list">
-        <li class="selection">
-          <div class="input-box">
-            <input type="text" placeholder="请输入身份证号"/>
+            <input type="text" placeholder="请输入负责人姓名"/>
           </div>
         </li>
       </ul>
@@ -32,11 +22,21 @@
       </ul>
     </div>
     <div class="group">
-      <label>邮箱</label>
+      <label>企业名称</label>
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            <input type="text" placeholder="请输入邮箱"/>
+            <input type="text" placeholder="请输入企业名称"/>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="group">
+      <label>企业邮箱</label>
+      <ul class="selection-list">
+        <li class="selection">
+          <div class="input-box">
+            <input type="text" placeholder="请输入企业邮箱"/>
           </div>
         </li>
       </ul>
@@ -64,14 +64,20 @@
       </ul>
     </div>
     <div class="group">
-      <label>证件照片</label>
+      <label>社会信用代码</label>
       <ul class="selection-list">
         <li class="selection">
-        <span class="tips">(请将人脸和身份证置于取景框中)</span>
-          <router-link :to="{path:'/yhzcPersonTip'}" tag="i">
-            <i class="iconfont q-style icon-31yiwen"></i>
-          </router-link>
-
+          <div class="input-box">
+            <input type="text" placeholder="请输入统一社会信用代码"/>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="group">
+      <label>营业执照</label>
+      <ul class="selection-list">
+        <li class="selection">
+        <span class="tips">(请将营业执照放置取景框内)</span>
         </li>
       </ul>
     </div>
@@ -83,11 +89,10 @@
       </div>
     </div>
     <router-link :to="{path:'/grxx'}" tag="div">
-      <div class="tel-valid">
-        <span class="valid">完成</span>
-      </div>
+    <div class="tel-valid">
+      <span class="valid">完成</span>
+    </div>
     </router-link>
-
 
   </div>
 
@@ -97,6 +102,7 @@
       data(){
           return{
             isShowpicker: false,
+            type:"text",
             image:null,
             pwd:"",
           }
@@ -104,6 +110,11 @@
     methods:{
       switchStatus() {
         this.isShowpicker = !this.isShowpicker;
+        if(this.type=="text"){
+          this.type = "password";
+        }else{
+          this.type = "text";
+        }
       },
       onFileChange(e) {
         var files = e.target.files || e.dataTransfer.files;
