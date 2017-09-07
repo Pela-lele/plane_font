@@ -73,7 +73,7 @@
         </li>
       </ul>
     </div>
-    <div class="group">
+    <div class="group border-style">
       <label>营业执照</label>
       <ul class="selection-list">
         <li class="selection">
@@ -213,6 +213,9 @@
           }
         }
       }
+    }
+    .border-style{
+      border: 0px;
     }
     .pic{
       display: flex;

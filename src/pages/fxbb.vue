@@ -4,24 +4,21 @@
     	<!-- <mt-header fixed title="无人机"></mt-header> -->
     	<div class="group">
     		<label>飞行证书</label>
-    		<ul class="selection-list">
+    		<!-- <ul class="selection-list"> -->
+    		<router-link :to="{path:'/fxzsList'}" tag="ul" class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>CHINA-BDKICHINA</span>
-	       			</div>
-	       			
-	       		</li>
-	       		<li class="selection">
-	       			<div class="input-box">
-	       				<span>CHINA-BDKICHINA</span>
+	       				<!-- <span>CHINA-BDKICHINA</span> -->
 	       			</div>
 	       			<i class="iconfont icon-add"></i>
 	       		</li>
-	       	</ul>
+	       	</router-link>
+	       	<!-- </ul> -->
 	    </div>
 	    <div class="group">
     		<label>无人机型号</label>
-    		<ul class="selection-list">
+    		<!-- <ul class="selection-list"> -->
+    		<router-link :to="{path:'/wrjxhList'}" tag="ul" class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
 	       				<span>CHINA-BDKICHINA</span>
@@ -34,7 +31,8 @@
 	       			</div>
 	       			<i class="iconfont icon-add"></i>
 	       		</li>
-	       	</ul>
+	       	</router-link>
+	       	<!-- </ul> -->
 	    </div>
 	    <div class="group">
 	    	<label>架数</label>
@@ -50,12 +48,14 @@
 	    	<label>飞行区域</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map'}" tag="li" class="selection">
+	       		<keep-alive>
+	       		<router-link :to="{path:'/map/area'}" tag="li" class="selection">
 	       			<div class="input-box">
 	       				<span>秦淮区夫子庙</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
 	       		</router-link>
+	       		</keep-alive>
 	       		<!-- </li> -->
 	       	</ul>
 	    </div>
@@ -63,12 +63,14 @@
 	    	<label>起飞点</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map'}" tag="li" class="selection">
+	       		<keep-alive>
+	       		<router-link :to="{path:'/map/start'}" tag="li" class="selection">
 	       			<div class="input-box">
 	       				<span>秦淮区夫子庙</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
 	       		</router-link>
+	       	</keep-alive>
 	       		<!-- </li> -->
 	       	</ul>
 	    </div>
@@ -76,7 +78,7 @@
 	    	<label>降落点</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map'}" tag="li" class="selection">
+	       		<router-link :to="{path:'/map/end'}" tag="li" class="selection">
 	       			<div class="input-box">
 	       				<span>秦淮区夫子庙</span>
 	       				<i class="iconfont icon-coordinates"></i>
@@ -130,10 +132,13 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入联系电话"/>
+	       				<input type="text" placeholder="请输入联系电话" v-model="formData.phone"/>
 	       			</div>
 	       		</li>
 	       	</ul>
+	    </div>
+	    <div class="footer">
+	    	<a @click="submitForm" class="sumitBtn">提交</a>
 	    </div>
 		<mt-datetime-picker 
 			ref="endTimePicker" 
@@ -158,7 +163,10 @@
 				startPickerValue: new Date(),
 				endPickerValue: new Date(),
 				startTime:"",
-				endTime:""
+				endTime:"",
+				formData:{
+					phone:""
+				}
 			}
 		},
 		methods: {
@@ -175,7 +183,14 @@
 			handleStartTimepicker(date) {
 				var str = date.Format("YYYY-MM-DD hh:mm");
 				this.startTime = str;
+			},
+			submitForm() {
+				this.$router.replace("/")
 			}
+		},
+		beforeRouteEnter(to, from, next) {
+			console.log(to, from)
+			next();
 		}
 	}
 </script>
@@ -189,9 +204,6 @@
 			border-width: 0 0 1px 0;
 			border-style: solid;
 			border-color: $border-color;
-			/* &.modules{
-				
-			} */
 			label{
 				vertical-align: middle;
 				width: 30%;
@@ -200,11 +212,13 @@
 				box-align:center;
 				align-items: center; */
 				padding-left: 8px;
+				text-align: center;
 			}
 			.selection-list{
 				display: flex;
 				flex:1;
 				flex-flow:column;
+				padding-left: 20px;
 				.selection{
 					width: 100%;
 					height: 48px;
@@ -217,10 +231,11 @@
 						padding-right: 20px;
 						height: 48px;
 						line-height: 48px;
-						color: #6e6a6a;
+						color: $theme-color;
+						// color: #6e6a6a;
 						&>*{
-							color: #6e6a6a;
-							// font-size: 1.2rem;
+							// color: #6e6a6a;
+							color: $theme-color;
 							border: 0 none;
 						}
 						input{
@@ -244,7 +259,22 @@
 				}
 			}	
 		}	
-			
+		.footer{
+			background: #fff;
+    		padding: 20px 0;
+    		.sumitBtn{
+				width: 150px;
+				height: 50px;
+				line-height: 50px;
+				background: #2196f3;
+				color: #fff;
+				display: block;
+				text-align: center;
+				font-size: 18px;
+				border-radius: 10px;
+				margin: 0 auto;
+    		}
+		}	
 		
 	}
 </style>

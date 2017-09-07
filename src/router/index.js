@@ -7,6 +7,7 @@ import index from '@/pages/index'
 import fxbb from '@/pages/fxbb'
 import grxx from '@/pages/grzx/grxx'
 import map from '@/pages/map'
+import fxzsList from '@/pages/fxzsList'
 import yhzcTel from '@/pages/grzx/yhzcTel'
 import yhzcType from '@/pages/grzx/yhzcType'
 import yhzcPerson from '@/pages/grzx/yhzcPerson'
@@ -17,6 +18,7 @@ import yhzcPwd from '@/pages/grzx/yhzcPwd'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -31,9 +33,13 @@ export default new Router({
       name: 'grxx',
       component: grxx
     },{
-      path: '/map',
+      path: '/map/:type',
       name: 'map',
       component: map
+    },{
+      path: '/fxzsList',
+        name: 'fxzsList',
+        component: fxzsList
     },{
       path: '/yhzcTel',
       name: 'yhzcTel',

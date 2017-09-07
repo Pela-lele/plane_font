@@ -11,7 +11,7 @@
           <input placeholder="请输入手机号">
         </div>
       </div>
-      <div class="info-list">
+      <div class="info-list border-style">
         <i class="iconfont icon-xiugaimima icon-style"></i>
         <div class="text-info">
           <input placeholder="请输入密码">
@@ -82,6 +82,9 @@
           }
         }
 
+      }
+      .border-style{
+        border: 0px;
       }
 
 
