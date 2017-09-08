@@ -18,7 +18,9 @@
         </div>
       </div>
       <div class="footer-bg">
+        <router-link :to="{path:'/grxxList'}" tag="span">
         <span class="log-in">登录</span>
+        </router-link>
         <div class="res-text">
           <router-link :to="{path:'/yhzcTel'}" tag="span">
             <span class="text-style">用户注册</span>
@@ -98,7 +100,7 @@
       left: 0px;
       right: 0px;
       .log-in{display: inline-block;
-        width: 240px;
+        width: 40%;
         margin-top: 50px;
         margin-bottom: 50px;
         text-align: center;

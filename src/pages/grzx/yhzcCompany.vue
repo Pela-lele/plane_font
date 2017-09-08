@@ -220,29 +220,30 @@
     .pic{
       display: flex;
       background-color: #fff;
-      height: 180px;
       text-align: center;
-      padding-top: 40px;
+      padding-top: 20px;
       .pic-style{
-        height: 120px;
-        width: 120px;
+        height: 160px;
+        width: 160px;
         border: 1px dashed $border-color;
         margin: 0 auto;
         position: relative;
         text-align: center;
         i{
-          font-size: 80px;
-          line-height: 120px;
+          font-size: 100px;
+          line-height: 160px;
           color: #6a6a6a;
         }
         input{
           position: absolute;
-          left: 24px;
-          top: 47px;
+          left: 0px;
+          top: 0px;
+          height: 160px;
+          width: 160px;
         }
         img{
-          width: 120px;
-          height: 120px;
+          width: 160px;
+          height: 160px;
           margin: 0 auto;
         }
       }
@@ -252,7 +253,7 @@
       background: #ffffff;
       .valid{
         display: inline-block;
-        width: 240px;
+        width: 40%;
         margin-top: 20px;
         margin-bottom: 20px;
         text-align: center;

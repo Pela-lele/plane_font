@@ -6,6 +6,7 @@ import Hello from '@/components/Hello'
 import index from '@/pages/index'
 import fxbb from '@/pages/fxbb'
 import grxx from '@/pages/grzx/grxx'
+import grxxList from '@/pages/grzx/grxxList'
 import map from '@/pages/map'
 import fxzsList from '@/pages/fxzsList'
 import yhzcTel from '@/pages/grzx/yhzcTel'
@@ -32,6 +33,10 @@ export default new Router({
       path: '/grxx',
       name: 'grxx',
       component: grxx
+    },{
+      path: '/grxxList',
+      name: 'grxxList',
+      component: grxxList
     },{
       path: '/map/:type',
       name: 'map',
