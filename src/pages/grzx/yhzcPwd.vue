@@ -23,6 +23,12 @@
           <i class="iconfont switch-style" :class="{'icon-xianshi':isShowpicker,'icon-yincang':!isShowpicker}" @click="switchStatus"></i>
         </div>
       </div>
+      <div class="info-list">
+        <i class="iconfont icon-xiugaimima  icon-style1"></i>
+        <div class="text-info">
+          <input placeholder="请再次输入新密码" type="text">
+        </div>
+      </div>
       <router-link :to="{path:'/grxx'}" tag="div">
       <div class="tel-valid">
         <span class="valid">完成</span>
@@ -103,7 +109,7 @@
         }
         .valid-code{
           padding: 0px 15px;
-          line-height: 28px;
+          line-height: 30px;
           border-radius: 10px;
           background: #2da8e1;
           color: white;

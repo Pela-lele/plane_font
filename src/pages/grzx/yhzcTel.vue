@@ -61,7 +61,7 @@
         }
         .valid-code{
           padding: 0px 15px;
-          line-height: 28px;
+          line-height: 30px;
           border-radius: 10px;
           background: #2da8e1;
           color: white;

@@ -3,6 +3,7 @@
   <div class="wrapper">
     <div class="grxx-bg">
       <span>个人中心</span>
+      <!--<i class="icon-icon4 iconfont"></i>-->
     </div>
     <div class="input-info">
       <div class="info-list">
