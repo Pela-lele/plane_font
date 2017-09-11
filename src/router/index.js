@@ -9,6 +9,7 @@ import grxx from '@/pages/grzx/grxx'
 import grxxList from '@/pages/grzx/grxxList'
 import map from '@/pages/map'
 import fxzsList from '@/pages/fxzsList'
+import wrjxhList from '@/pages/wrjxhList'
 import yhzcTel from '@/pages/grzx/yhzcTel'
 import yhzcType from '@/pages/grzx/yhzcType'
 import yhzcPerson from '@/pages/grzx/yhzcPerson'
@@ -45,6 +46,10 @@ export default new Router({
       path: '/fxzsList',
         name: 'fxzsList',
         component: fxzsList
+    },{
+      path: '/wrjxhList',
+        name: 'wrjxhList',
+        component: wrjxhList
     },{
       path: '/yhzcTel',
       name: 'yhzcTel',

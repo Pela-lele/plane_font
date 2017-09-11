@@ -6,12 +6,22 @@
     		<label>飞行证书</label>
     		<!-- <ul class="selection-list"> -->
     		<router-link :to="{path:'/fxzsList'}" tag="ul" class="selection-list">
-	       		<li class="selection">
-	       			<div class="input-box">
-	       				<!-- <span>CHINA-BDKICHINA</span> -->
-	       			</div>
+	    		<template v-if="Object.keys(formData.fxzsObj).length>0">
+	    			<li class="selection" v-for="(item, key, index) in formData.fxzsObj">
+		       			<div class="input-box">
+		       				<span>{{item.name}}</span>
+		       			</div>
+		       			<i class="iconfont icon-add" v-if="index == Object.keys(formData.fxzsObj).length-1"></i>
+		       		</li>
+	    		</template>
+	    		<template v-else>
+	    			<li class="selection">
+		       			<i class="iconfont icon-add"></i>
+		       		</li>
+	    		</template>
+	       		<!-- <li class="selection">
 	       			<i class="iconfont icon-add"></i>
-	       		</li>
+	       		</li> -->
 	       	</router-link>
 	       	<!-- </ul> -->
 	    </div>
@@ -19,18 +29,19 @@
     		<label>无人机型号</label>
     		<!-- <ul class="selection-list"> -->
     		<router-link :to="{path:'/wrjxhList'}" tag="ul" class="selection-list">
-	       		<li class="selection">
-	       			<div class="input-box">
-	       				<span>CHINA-BDKICHINA</span>
-	       			</div>
-	       			
-	       		</li>
-	       		<li class="selection">
-	       			<div class="input-box">
-	       				<span>CHINA-BDKICHINA</span>
-	       			</div>
-	       			<i class="iconfont icon-add"></i>
-	       		</li>
+    			<template v-if="Object.keys(formData.wrjxhObj).length>0">
+		       		<li class="selection" v-for="(item, key, index) in formData.wrjxhObj">
+		       			<div class="input-box">
+		       				<span>{{item.name}}</span>
+		       			</div>
+		       			<i class="iconfont icon-add" v-if="index == Object.keys(formData.wrjxhObj).length-1"></i>
+		       		</li>
+		       	</template>
+	    		<template v-else>
+	    			<li class="selection">
+		       			<i class="iconfont icon-add"></i>
+		       		</li>
+	    		</template>
 	       	</router-link>
 	       	<!-- </ul> -->
 	    </div>
@@ -39,7 +50,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>2架</span>
+	       				<input type="text" placeholder="请输入架数"/>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -156,7 +167,7 @@
     
 </template>
 <script>
-	
+	import bus from '@/assets/eventBus';
 	export default {
 		data() {
 			return {
@@ -165,7 +176,9 @@
 				startTime:"",
 				endTime:"",
 				formData:{
-					phone:""
+					phone:"",
+					fxzsObj:{},
+					wrjxhObj:{}
 				}
 			}
 		},
@@ -188,9 +201,25 @@
 				this.$router.replace("/")
 			}
 		},
-		beforeRouteEnter(to, from, next) {
-			console.log(to, from)
+		beforeRouteLeave(to, from, next) {
+			console.log(to, from);
+			if(to.name == "index"){
+				console.log("销毁")
+				// this.$destroy()
+			}
 			next();
+		},
+		mounted(){
+			console.log("mounted");
+			var self = this;
+			bus.$on("fxzs",function(selectObj){
+				console.log(selectObj);
+				self.formData.fxzsObj = selectObj;
+			});
+			
+			bus.$on("wrjxh",function(selectObj){
+				self.formData.wrjxhObj = selectObj;
+			});
 		}
 	}
 </script>
@@ -263,16 +292,16 @@
 			background: #fff;
     		padding: 20px 0;
     		.sumitBtn{
-				width: 150px;
-				height: 50px;
-				line-height: 50px;
-				background: #2196f3;
-				color: #fff;
-				display: block;
-				text-align: center;
-				font-size: 18px;
-				border-radius: 10px;
-				margin: 0 auto;
+			    width: 80%;
+			    height: 38px;
+			    line-height: 38px;
+			    background: #2196f3;
+			    color: #fff;
+			    display: block;
+			    text-align: center;
+			    font-size: 16px;
+			    border-radius: 5px;
+			    margin: 0 auto;
     		}
 		}	
 		

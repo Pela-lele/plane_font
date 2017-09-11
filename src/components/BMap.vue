@@ -145,7 +145,7 @@
 						var point = this.getPosition();
 						circle.setCenter(point);
 						map.addOverlay(circle);
-						// self.refreshZoom()
+						self.refreshZoom()
 					});
 				}else{
 
