@@ -112,7 +112,7 @@
 	    <div class="group">
 	    	<label>开始时间</label>
        		<ul class="selection-list">
-	       		<li class="selection" @click="openStartTimepicker">
+	       		<li class="selection" @click="openTimepicker($event,'startTime')">
 	       			<div class="input-box">
 	       				<span>{{! startTime==""?startTime:"请选择开始时间"}}</span>
 	       			</div>
@@ -122,7 +122,7 @@
 	    <div class="group">
 	    	<label>结束时间</label>
        		<ul class="selection-list">
-	       		<li class="selection" @click="openEndTimepicker">
+	       		<li class="selection" @click="openTimepicker($event,'endTime')">
 	       			<div class="input-box">
 						<span>{{! endTime==""?endTime:"请选择结束时间"}}</span>
 	       			</div>
@@ -152,32 +152,17 @@
 	    <div class="footer">
 	    	<a @click="submitForm" class="sumitBtn">提交</a>
 	    </div>
-		<!-- <mt-datetime-picker 
-			ref="endTimePicker" 
-			type="datetime" 
-			v-model="endPickerValue"
-			@confirm="handleEndTimepicker">
-		</mt-datetime-picker> -->
-		<mt-datetime-picker 
-			ref="startTimePicker" 
-			type="datetime" 
-			v-model="startPickerValue"
-			@confirm="handleStartTimepicker">
-		</mt-datetime-picker>
-
-		<group>
-	      <datetime year-row="{value}年" month-row="{value}月" day-row="{value}日" format="YYYY-MM-DD HH:mm" :title="$t('Birthday')" placeholder="111"></datetime>
-	    </group>
     </div>
     
 </template>
 <script>
 	import bus from '@/assets/eventBus';
-	import { Datetime, Group } from 'vux'
+	import { Datetime, Group, XButton } from 'vux'
 	export default {
 		components: {
 			Datetime,
-			Group
+			Group,
+			XButton
 		},
 		data() {
 			return {
@@ -193,35 +178,21 @@
 			}
 		},
 		methods: {
-			openEndTimepicker() {
-				// this.$refs.endTimePicker.open();
-				 console.log(this.$vux)
-				/*this.$vux.datetime.show({
+			openTimepicker(e,typeTime) {
+				var self = this;
+				console.log(arguments)
+				this.$vux.datetime.show({
 			        cancelText: '取消',
 			        confirmText: '确定',
-			        format: 'YYYY-MM-DD HH',
+			        format: 'YYYY-MM-DD HH:mm',
+			        yearRow: "{value}年",
+			        monthRow: "{value}月",
+			        dayRow: "{value}日",
 			        value: '2017-05-20 18',
 			        onConfirm (val) {
-			          console.log('plugin confirm', val)
-			        },
-			        onShow () {
-			          console.log('plugin show')
-			        },
-			        onHide () {
-			          console.log('plugin hide')
+			          self[typeTime] = val;
 			        }
-			      })*/
-			},
-			openStartTimepicker() {
-				this.$refs.startTimePicker.open();
-			},
-			handleEndTimepicker(date) {
-				var str = date.Format("YYYY-MM-DD hh:mm");
-				this.endTime = str;
-			},
-			handleStartTimepicker(date) {
-				var str = date.Format("YYYY-MM-DD hh:mm");
-				this.startTime = str;
+			      })
 			},
 			submitForm() {
 				this.$router.replace("/")

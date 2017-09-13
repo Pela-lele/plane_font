@@ -3,7 +3,7 @@ var fs = require('fs')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-var vuxLoader = require('vux-loader')
+
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -26,7 +26,7 @@ var webpackConfig = {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
     },
-    symlinks: false
+    symlinks: true
   },
   module: {
     rules: [
@@ -67,6 +67,8 @@ var webpackConfig = {
     ]
   }
 }
+
+var vuxLoader = require('vux-loader')
 module.exports = vuxLoader.merge(webpackConfig, {
   plugins: ['vux-ui']
 })

@@ -22,9 +22,11 @@ export default {
   margin-top: 60px;*/
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   background-color: #F4F4F4;
-  font-size: 1.4rem
+  font-size: 1.4rem;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 ::-webkit-scrollbar {
     width: 2px;

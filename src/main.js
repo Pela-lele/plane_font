@@ -55,6 +55,23 @@ store.registerModule('vux', {
 Vue.use(vuexI18n.plugin, store)
 Vue.i18n.set('zh-CN')
 
+// plugins
+import { ConfigPlugin, BusPlugin, DatetimePlugin, LocalePlugin, DevicePlugin, ToastPlugin, AlertPlugin, ConfirmPlugin, LoadingPlugin, WechatPlugin, AjaxPlugin, AppPlugin } from 'vux'
+
+Vue.use(DevicePlugin)
+Vue.use(ToastPlugin)
+Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
+Vue.use(LoadingPlugin)
+Vue.use(WechatPlugin)
+Vue.use(AjaxPlugin)
+Vue.use(LocalePlugin)
+Vue.use(DatetimePlugin)
+Vue.use(BusPlugin)
+Vue.use(ConfigPlugin, {
+  $layout: 'VIEW_BOX' // global config for VUX, since v2.5.12
+})
+
 
 Vue.use(MintUI)
 Vue.config.productionTip = false
