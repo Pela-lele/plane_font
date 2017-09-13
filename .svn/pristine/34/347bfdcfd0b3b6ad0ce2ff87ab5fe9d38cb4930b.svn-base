@@ -1,0 +1,184 @@
+$border-color: #e8e8e8;
+$theme-color: #2196f3;
+$grey-color: #6e6a6a;
+
+@mixin wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.list-cell {
+    background-color:#fff;
+    box-sizing:border-box;
+    color:inherit;
+    min-height:48px;
+    display:block;
+    overflow:hidden;
+    position:relative;
+    text-decoration:none;
+}
+.list-cell img {
+    vertical-align:middle;
+}
+.list-cell:first-child .list-cell-wrapper {
+    background-origin:border-box;
+}
+.list-cell:last-child {
+    background-image:-webkit-linear-gradient(bottom, #d9d9d9, #d9d9d9 50%, transparent 50%);
+    background-image:linear-gradient(0deg, #d9d9d9, #d9d9d9 50%, transparent 50%);
+    background-size:100% 1px;
+    background-repeat:no-repeat;
+    background-position:bottom;
+}
+.list-cell-wrapper {
+    background-image:-webkit-linear-gradient(top, #d9d9d9, #d9d9d9 50%, transparent 50%);
+    background-image:linear-gradient(180deg, #d9d9d9, #d9d9d9 50%, transparent 50%);
+    background-size: 120% 1px;
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-origin: content-box;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 16px;
+    line-height: 1;
+    min-height: inherit;
+    overflow: hidden;
+    padding: 0 10px;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #efefef;
+}
+.list-cell-mask {}
+.list-cell-mask::after {
+    background-color:#000;
+    content:" ";
+    opacity:0;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    position:absolute;
+}
+.list-cell-mask:active::after {
+    opacity:.1;
+}
+.list-cell-text {
+    vertical-align: middle;
+}
+.list-cell-label {
+    color: #888;
+    display: block;
+    font-size: 12px;
+    margin-top: 10px;
+}
+.list-cell-title {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+}
+.list-cell-value {
+    color: #888;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+.list-cell-value.is-link {
+    margin-right:24px;
+}
+.list-cell-left {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+}
+.list-cell-right {
+    position: absolute;
+    height: 100%;
+    right: 0;
+    top: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0);
+}
+.list-cell-allow-right::after {
+    border: solid 2px #c8c8cd;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    content: " ";
+    top:50%;
+    right:20px;
+    position: absolute;
+    width:5px;
+    height:5px;
+    -webkit-transform: translateY(-50%) rotate(45deg);
+            transform: translateY(-50%) rotate(45deg);
+}
+
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+html{
+  font-size: 62.5%;
+ 
+}
+html,body{
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
