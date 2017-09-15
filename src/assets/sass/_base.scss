@@ -2,6 +2,7 @@ $border-color: #e8e8e8;
 $theme-color: #2196f3;
 $grey-color: #6e6a6a;
 $reject-color:#e51c23;
+$btn-color:#2196f3;
 
 @mixin wrapper {
     width: 100%;
@@ -190,46 +191,47 @@ html,body{
   padding: 0;
   margin: 0;
 }
-//XX管理公共列表页及详情页样式
-.common-container{
-  padding-bottom: 48px;
-  .common-list{
-    display: flex;
-    background: #ffffff;
-    padding: 5px 20px;
-    border-bottom: 1px dashed $border-color;
-    //证书及无人机等图片样式
-    img{
-      width: 80px;
-      height: 80px;
-      padding: 0 20px;
-    }
-    .common-info{
-      flex: 1;
-      font-size: 14px;
-      //证书及无人机两行描述文字
-      .common-info-text{
-        padding: 10px 0px 10px 20px;
-
-      }
-      //证书及无人机单行描述文字
-      .common-single-text{
-        padding: 10px 0px 10px 20px;
-        line-height: 60px;
-
-      }
-    }
-    //证书及无人机右侧图标
-    .common-right{
-      color: $theme-color;
-      line-height: 80px;
-      font-size: 24px;
-      width: 20px;
-
-    }
-
-  }
+input[type=search] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+  font-family: inherit;
+  font-size: 100%;
 }
+input::-webkit-search-decoration,input::-webkit-search-cancel-button {
+  display: none;
+}
+button,
+input[type="button"],
+input[type="submit"],
+input[type="checkbox"],
+input[type="radio"],
+input[type="text"],
+input[type="password"],
+input[type="search"],
+input[type="file"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="url"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="datetime-local"],
+input[type="datetime"],
+input[type="time"],
+keygen,
+input[list],
+textarea,
+select,
+input[type=range],
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+}
+
 //底部固定按钮,用于新增
 .common-footer {
   position: fixed;
@@ -249,7 +251,23 @@ html,body{
     color: #fff;
 
   }
-
+}
+//用于非固定底部的按钮，提交，保存等
+.common-absolute-footer{
+  background: #fff;
+  padding: 20px 0;
+  .absolute-footer-btn{
+    width: 80%;
+    height: 38px;
+    line-height: 38px;
+    background: #2196f3;
+    color: #fff;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 0 auto;
+  }
 }
 //填写表单信息页及详情页样式
 .group {
@@ -334,4 +352,61 @@ html,body{
     color: white;
   }
 }
+//用于显示拍照/选择图片
+.pic{
+  display: flex;
+  background-color: #fff;
+  height: 180px;
+  text-align: center;
+  padding-top: 20px;
+  .pic-style{
+    height: 160px;
+    width: 160px;
+    border: 1px dashed $border-color;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    i{
+      font-size: 100px;
+      line-height: 160px;
+      color: #6a6a6a;
+    }
+    input{
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      height: 160px;
+      width: 160px;
+    }
+    img{
+      width: 160px;
+      height: 160px;
+      margin: 0 auto;
+    }
+  }
+}
+//显示指示信息
+.tips{
+  line-height: 50px;
+  color: #6a6a6a;
+  font-size: 12px;
+}
+//显示密码明密文切换
+.switch-style {
+  font-size: 24px;
+  width: 20px;
+  position: absolute;
+  right: 10px;
+  color: $theme-color;
+}
+//?的样式
+.q-style{
+  font-size: 24px;
+  width: 20px;
+  position: absolute;
+  top:12px;
+  right: 10px;
+  color: $theme-color;
+}
+
 

@@ -87,9 +87,11 @@
 	       		</li>
 	       	</ul>
 	    </div>
-	   <div class="common-footer-red"><span class="footer-red-btn">举报</span></div>
+      <router-link :to="{path:'/fxbbjbDetail'}" tag="div">
+	      <div class="common-footer-red"><span class="footer-red-btn">举报</span></div>
+      </router-link>
     </div>
-    
+
 </template>
 <script>
 	import bus from '@/assets/eventBus';
@@ -110,7 +112,7 @@
 				console.log(selectObj);
 				self.formData.fxzsObj = selectObj;
 			});
-			
+
 			bus.$on("wrjxh",function(selectObj){
 				self.formData.wrjxhObj = selectObj;
 			});

@@ -11,11 +11,13 @@
       </div>
     </div>
     <div class="list">
-      <div class="grxx-list">
-        <i class="iconfont icon-jihua icon-list"></i>
-        <span>已报备飞行计划</span>
-        <i class="iconfont icon-enter arrow-right"></i>
-      </div>
+      <router-link :to="{path:'/fxjhList'}" tag="div">
+        <div class="grxx-list">
+          <i class="iconfont icon-jihua icon-list"></i>
+          <span>已报备飞行计划</span>
+          <i class="iconfont icon-enter arrow-right"></i>
+        </div>
+      </router-link>
       <router-link :to="{path:'/fxzs'}" tag="div">
         <div class="grxx-list">
           <i class="iconfont icon-zhengshu icon-list"></i>
@@ -46,8 +48,8 @@
       </router-link>
 
       <router-link :to="{path:'/grxx'}" tag="div">
-        <div class="log-out">
-          <span class="out">注销登录</span>
+        <div class="common-absolute-footer">
+          <span class="absolute-footer-btn">注销登录</span>
         </div>
       </router-link>
 
@@ -117,21 +119,9 @@
           padding: 20px;
         }
       }
-      .log-out{
-        text-align: center;
-        .out{
-          display: inline-block;
-          width: 40%;
-          margin-top: 20px;
-          margin-bottom: 20px;
-          text-align: center;
-          border-radius: 40px;
-          padding: 15px 10px;
-          background: #2da8e1;
-          color: white;
-          box-shadow: 1px 1px #0086b3;
-        }
-      }
+    }
+    .common-absolute-footer{
+      background: none;
     }
 
 

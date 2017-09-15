@@ -1,19 +1,19 @@
 <template>
 	<div class="wrapper">
 		<div id="bdmap">
-			
+
 		</div>
 		<div class="map-footer" @click="goFxjh">
 			周边2起飞行计划
 		</div>
 	</div>
-	
+
 </template>
 
 <script>
 	import pointIcon from '../../assets/img/map/point-red.png'
 	import planeIcon from '../../assets/img/map/uPlane-red.png'
-	
+
 	export default {
 		data(){
 			return {
@@ -50,10 +50,10 @@
 				map.panTo(_m.center);
 			},
 			goFxjh() {
-				this.$router.push("/fxjhList")
+				this.$router.push("/fxjhAroundList")
 			},
 			initOverlays() {
-				
+
 			}
 		},
 		mounted() {
@@ -77,7 +77,7 @@
 					var marker = self.marker = new BMap.Marker(point);
 					marker.setIcon(point_icon);
 					marker.disableDragging();
-					map.addOverlay(marker);  
+					map.addOverlay(marker);
 
 					//标注飞机点位118.74358306026  32.007347809188
 					for(var i=0;i<2;i++){
@@ -87,15 +87,15 @@
 						var plane_icon = new BMap.Icon(planeIcon, new BMap.Size(32,32));
 						var plane_marker = new BMap.Marker(plane_point);
 						plane_marker.setIcon(plane_icon);
-						map.addOverlay(plane_marker);  
+						map.addOverlay(plane_marker);
 					}
-					
+
 
 
 				}else{
 
 				}
-			},{enableHighAccuracy: true})  
+			},{enableHighAccuracy: true})
 		}
 	}
 </script>
@@ -115,7 +115,7 @@
 		left: 0;
 		right: 0;
 	}
-	
+
 	.map-footer{
 		width: 100%;
 	    line-height: 48px;

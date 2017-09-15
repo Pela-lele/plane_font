@@ -57,6 +57,26 @@
 	       	</ul>
 	    </div>
 	    <div class="group">
+	    	<label>开始时间</label>
+       		<ul class="selection-list">
+	       		<li class="selection" @click="openTimepicker($event,'startTime')">
+	       			<div class="input-box">
+	       				<span>{{! startTime==""?startTime:"请选择开始时间"}}</span>
+	       			</div>
+	       		</li>
+	       	</ul>
+	    </div>
+	    <div class="group">
+	    	<label>结束时间</label>
+       		<ul class="selection-list">
+	       		<li class="selection" @click="openTimepicker($event,'endTime')">
+	       			<div class="input-box">
+						<span>{{! endTime==""?endTime:"请选择结束时间"}}</span>
+	       			</div>
+	       		</li>
+	       	</ul>
+	    </div>
+	    <div class="group">
 	    	<label>飞行区域</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
@@ -109,32 +129,14 @@
 	       		</li>
 	       	</ul>
 	    </div>
-	    <div class="group">
-	    	<label>开始时间</label>
-       		<ul class="selection-list">
-	       		<li class="selection" @click="openTimepicker($event,'startTime')">
-	       			<div class="input-box">
-	       				<span>{{! startTime==""?startTime:"请选择开始时间"}}</span>
-	       			</div>
-	       		</li>
-	       	</ul>
-	    </div>
-	    <div class="group">
-	    	<label>结束时间</label>
-       		<ul class="selection-list">
-	       		<li class="selection" @click="openTimepicker($event,'endTime')">
-	       			<div class="input-box">
-						<span>{{! endTime==""?endTime:"请选择结束时间"}}</span>
-	       			</div>
-	       		</li>
-	       	</ul>
-	    </div>
+	    
 	    <div class="group">
 	    	<label>飞行用途</label>
        		<ul class="selection-list">
 	       		<li class="selection">
-	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入飞行用途"/>
+	       			<div class="input-box" @click="sheetVisible = true">
+	       				<span>{{formData.fxyt || "请选择飞行用途"}}</span>
+	       				<!-- <input type="text" placeholder="请输入飞行用途" readonly="" /> -->
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -152,6 +154,7 @@
 	    <div class="footer">
 	    	<a @click="submitForm" class="sumitBtn">提交</a>
 	    </div>
+	    <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
     </div>
     
 </template>
@@ -166,17 +169,21 @@
 		},
 		data() {
 			return {
+				sheetVisible: false,//飞行用途选框显隐
+				actions: [],//飞行用途选择
 				startPickerValue: new Date(),
 				endPickerValue: new Date(),
 				startTime:"",
 				endTime:"",
 				formData:{
 					phone:"",
+					fxyt:"",
 					fxzsObj:{},
 					wrjxhObj:{}
 				}
 			}
 		},
+		
 		methods: {
 			openTimepicker(e,typeTime) {
 				var self = this;
@@ -193,6 +200,9 @@
 			          self[typeTime] = val;
 			        }
 			      })
+			},
+			setFxyt(val) {
+				this.formData.fxyt = val.name;	
 			},
 			submitForm() {
 				this.$router.replace("/")
@@ -217,6 +227,15 @@
 			bus.$on("wrjxh",function(selectObj){
 				self.formData.wrjxhObj = selectObj;
 			});
+			this.actions = [{
+		        name: '拍摄风景',
+		        value:1,
+		        method: this.setFxyt
+		    }, {
+		        name: '环境监测',
+		        value:2,
+		        method: this.setFxyt
+		    }];
 		}
 	}
 </script>

@@ -10,7 +10,6 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper {
-    overflow: hidden;
     .tip{
       text-align: center;
       padding-top: 20px;

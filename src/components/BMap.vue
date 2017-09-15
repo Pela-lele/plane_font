@@ -4,33 +4,51 @@
 			
 		</div>
 		<!-- 地图上层页面 -->
+		<div class="map-searcher">
+			<div class="search-box">
+				<div class="search-input">
+					<i class="iconfont icon-search"></i>
+					<input type="search" v-model="searchInput" id="searchInput" />
+					<a href="javascript:" class="icon-clear" @click="searchInput = ''" v-show="searchInput !== ''">
+						<i class="iconfont icon-delete"></i>
+					</a>
+				</div>
+			</div>
+			<!-- <label class="search-bar">搜索</label> -->
+		</div>
 		<div class="map-legend">
 			<p class="legend-item"><i class="legend-item-icon forbid"></i>禁飞</p>
 			<p class="legend-item"><i class="legend-item-icon limit"></i>限飞</p>
 		</div>
 		<div class="map-range" :class="{showPicker:isShowpicker}" v-if="showRange">
 			<div class="toolbar" @click="togglePicker">
-				<i class="iconfont" :class="{'icon-unfold':isShowpicker,'icon-packup':!isShowpicker}"></i>
-				飞行范围：{{range}}
+				<i class="iconfont icon-gengduo"></i>
+				飞行范围：{{range[0]}}
 			</div>
-			<mt-picker :slots="rangeSlot" @change="onRangeChange" :visible-item-count="3"></mt-picker>
+			<!-- <mt-picker :slots="rangeSlot" @change="onRangeChange" :visible-item-count="3"></mt-picker> -->
 		</div>
+			<popup-picker :show.sync="isShowpicker" :show-cell="false" title="飞行范围" :data="[['100', '300', '500', '1000', '2000', '3000']]" v-model="range"></popup-picker>
 	</div>
 	
 </template>
 
 <script>
 	import planeIcon from '../assets/img/map/uPlane-red.png'
+	import { PopupPicker } from 'vux'
 	export default {
+		components: {
+			PopupPicker
+		},
 		data(){
 			return {
-				range: "300",
-				rangeSlot: [{
+				range: ["500"],
+				searchInput: "",
+				/*rangeSlot: [{
 					flex: 1,
 					values: ['100', '300', '500', '1000', '2000', '3000'],
 					className: 'slot1',
 					textAlign: 'center'
-			    }],
+			    }],*/
 			    isShowpicker: false,
 			    map: null,
 			    overlays:{
@@ -44,17 +62,19 @@
 			    pageType: "area"//页面功能，起始点、结束点、划区域
 			}
 		},
+		watch: {
+			range(curVal){
+				this.changeRange(curVal)
+			}
+		},
 		props:["showRange"],
 		methods: {
-			onRangeChange(picker, values) {
-				if(values[0]){
-					console.log("onRangeChange")
-					var range = this.range = values[0];
-					// this.map.removeOverlay(this.circle)
-					this.circle.setRadius(range);
-					// this.map.addOverlay(this.circle);
-					this.refreshZoom();
-				}
+			changeRange(range) {
+				console.log("onRangeChange")
+				// this.map.removeOverlay(this.circle)
+				this.circle.setRadius(range[0]);
+				// this.map.addOverlay(this.circle);
+				this.refreshZoom();
 			},
 			togglePicker() {
 				this.isShowpicker = !this.isShowpicker;
@@ -100,6 +120,40 @@
 				map.setZoom(_m.zoom-1);
 				map.panTo(_m.center);
 			},
+			initSearch() {
+				var self = this;
+				var map = this.map;
+				var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+					{"input" : "searchInput"
+					,"location" : map
+				});
+				ac.addEventListener("onconfirm", function(e) {
+					var _value = e.item.value;
+					console.log(_value)
+					var searchValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+					self.setPlace(searchValue);
+				});
+			},
+			setPlace(searchValue) {
+				var self = this;
+				var map = this.map;
+				var local = new BMap.LocalSearch(map, { //智能搜索
+				  	onSearchComplete: function(){
+				  		var point = local.getResults().getPoi(0).point;
+				  		console.log(point);
+				  		map.panTo(point);
+				  		map.removeOverlay(self.circle);
+				  		self.marker.setPosition(point);
+				  		self.circle.setCenter(point);
+				  		map.addOverlay(self.circle);
+				  		// self.refreshZoom();
+				  		// map.centerAndZoom(point, 18);
+						// map.addOverlay(new BMap.Marker(pp));    //添加标注
+
+				  	}
+				});
+				local.search(searchValue);
+			},
 			initOverlays() {
 				
 			}
@@ -108,11 +162,13 @@
 			var self = this;
 			var type = this.pageType = this.$route.params.type;
 			var map = this.map = new BMap.Map("bdmap");
+
 			map.centerAndZoom(new BMap.Point(115.404, 32.915), 5);
+			map.enableScrollWheelZoom(true);
 			this.addLimitArea();
 			this.addForbidArea();
 
-
+			this.initSearch();
 
 			this.initOverlays();
 			var geolocation = new BMap.Geolocation();
@@ -185,12 +241,65 @@
 		left: 0;
 		right: 0;
 	}
-	
+	.map-searcher{
+		display: flex;
+		background-color: rgba(239,239,244,0.6);
+		position: relative;
+		padding: 8px 10px;
+		.search-box{
+			position: relative;
+			flex: auto;
+			background-color: #fff;
+    		.search-input{
+    			position: relative;
+			    // padding-left: 35px;
+			    // padding-right: 30px;
+			    height: 100%;
+			    width: 100%;
+			    z-index: 1;
+			    .iconfont.icon-search{
+					position: absolute;
+					left: 10px;
+					top: 0;
+					line-height: 28px;
+					font-size: 18px;
+					color: #ccc;
+			    }
+			    .icon-clear{
+					position: absolute;
+				    top: 0;
+				    right: 0;
+				    padding: 0 10px;
+				    line-height: 28px;
+				    color: #ccc;
+			    }
+			    input{
+					padding: 4px 10px;
+					width: 100%;
+					height: 28px;
+					border: 0;
+					font-size: 14px;
+					line-height: 28px;
+					box-sizing: border-box;
+					background: transparent;
+					outline: 0;
+					padding-left: 35px;
+			    	padding-right: 30px;
+			    }
+    		}
+		}
+		.search-bar{
+			margin-left: 10px;
+			line-height: 28px;
+			color: $theme-color;
+			white-space: nowrap;
+		}
+	}
 	.map-legend{
 		background-color: #fff;
 		border: 1px solid $border-color;
 		position: absolute;
-		top: 10px;
+		top: 60px;
 		left: 10px;
 		box-shadow: 2px 3px 10px #888888;
 		.legend-item{
@@ -219,7 +328,7 @@
 	.map-range{
 		position: absolute;
 		width: 100%;
-		bottom: -108px;
+		bottom: 0;
 		background-color: #fff;
 		transition: all .5s;
 		&.showPicker{
@@ -233,7 +342,7 @@
 			border-top: 1px solid $border-color;
 			color: $theme-color;
 			.iconfont{
-				font-size: 20px;
+				font-size: 15px;
 				vertical-align: middle;
 			}
 		}

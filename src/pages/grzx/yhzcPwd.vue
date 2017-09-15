@@ -30,8 +30,8 @@
         </div>
       </div>
       <router-link :to="{path:'/grxx'}" tag="div">
-      <div class="tel-valid">
-        <span class="valid">完成</span>
+      <div class="common-absolute-footer">
+        <span class="absolute-footer-btn">完成</span>
       </div>
       </router-link>
 
@@ -57,7 +57,6 @@
   <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper {
-    overflow: hidden;
     .input-info {
       box-sizing: border-box;
       display: block;
@@ -115,21 +114,6 @@
           color: white;
           margin: 10px;
         }
-      }
-    }
-    .tel-valid{
-      text-align: center;
-      .valid{
-        display: inline-block;
-        width: 240px;
-        margin-top: 50px;
-        margin-bottom: 50px;
-        text-align: center;
-        border-radius: 40px;
-        padding: 15px 10px;
-        background: #2da8e1;
-        color: white;
-        box-shadow: 1px 1px #0086b3;
       }
     }
   }

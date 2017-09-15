@@ -20,6 +20,7 @@ import zcggDetail from '@/pages/tzgg/zcggDetail'
 /*监督举报*/
 import jdjb from '@/pages/jdjb/jdjb'
 import fxbbjb from '@/pages/jdjb/fxbbjb'
+import fxbbjbDetail from '@/pages/jdjb/fxbbjbDetail'
 
 /*二维码*/
 import code from '@/pages/code'
@@ -42,6 +43,8 @@ import fxzsSelZs from '@/pages/fxzs/fxzsSelZs'
 import fxzsDetail from '@/pages/fxzs/fxzsDetail'
 /*飞行计划列表*/
 import fxjhList from '@/pages/fxjh/fxjhList'
+/*周围的飞行计划列表*/
+import fxjhAroundList from '@/pages/fxjh/fxjhAroundList'
 /*无人机管理*/
 import wrjgl from '@/pages/wrjgl/wrjgl'
 import wrjglDetail from '@/pages/wrjgl/wrjglDetail'
@@ -90,6 +93,10 @@ export default new Router({
         name: 'fxbbjb',
         component: fxbbjb
     },{
+      path: '/fxbbjbDetail',
+      name: 'fxbbjbDetail',
+      component: fxbbjbDetail
+    },{
         path: '/code',
         name: 'code',
         component: code
@@ -109,6 +116,10 @@ export default new Router({
       path: '/fxzsList',
         name: 'fxzsList',
         component: fxzsList
+    },{
+      path: '/fxjhAroundList',
+      name: 'fxjhAroundList',
+      component: fxjhAroundList
     },{
       path: '/wrjxhList',
         name: 'wrjxhList',

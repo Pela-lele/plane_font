@@ -3,7 +3,6 @@
   <div class="wrapper">
     <div class="grxx-bg">
       <span>个人中心</span>
-      <!--<i class="icon-icon4 iconfont"></i>-->
     </div>
     <div class="input-info">
       <div class="info-list">
@@ -40,8 +39,6 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper{
-    overflow: hidden;
-
     .grxx-bg{
     background:url(../../assets/img/grxx/bg.jpg) repeat;
     height: 180px;
@@ -100,14 +97,15 @@
       bottom: 0px;
       left: 0px;
       right: 0px;
-      .log-in{display: inline-block;
-        width: 40%;
+      .log-in{
+        display: inline-block;
+        width: 80%;
         margin-top: 50px;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
         text-align: center;
-        border-radius: 40px;
+        border-radius: 10px;
         padding: 15px 10px;
-        background: #2da8e1;
+        background: $btn-color;
         color: white;
       }
       .res-text{

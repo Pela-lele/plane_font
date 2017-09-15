@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
     <ul class="mlist">
-
       <div class="list-cell" v-for="item in datas" @click="getSelecItem(item)" :class="{selected: selectedItem}">
         <div class="list-cell-wrapper" >
           <div class="list-cell-image">
@@ -16,11 +15,11 @@
       </div>
 
     </ul>
-    <router-link :to="{path:'/wrjglAdd'}" tag="div">
-      <div class="common-footer">
-        <span class="common-footer-btn">确定</span>
-      </div>
-    </router-link>
+
+    <div class="common-footer" @click="submit">
+      <span class="common-footer-btn">确定</span>
+    </div>
+
   </div>
 </template>
 
@@ -66,7 +65,11 @@
     methods:{
         getSelecItem(item){
             this.selectedItem = item.name;
-        }
+        },
+      submit (){
+        bus.$emit("productor",this.selectedItem);
+        this.$router.back(-1);
+      }
 
     }
   }

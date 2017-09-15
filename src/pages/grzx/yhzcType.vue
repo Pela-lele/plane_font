@@ -23,7 +23,6 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper {
-    overflow: hidden;
     .user-type{
       background: #ffffff;
       vertical-align: middle;
