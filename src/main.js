@@ -3,6 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+
+import api from "./api"; 
+Vue.use(api);
+
 //import MuseUI from 'muse-ui'
 //import 'muse-ui/dist/muse-ui.css'
 //import 'muse-ui/dist/theme-carbon.css' // 使用 carbon 主题

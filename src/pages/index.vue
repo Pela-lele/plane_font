@@ -36,7 +36,18 @@
     
 </template>
 
-
+<script>
+    export default {
+        methods: {
+            getData(){
+               this.$ajax.get("/mDrone/dronem/list.action",{params: { 'type': '1' }})
+            }
+        },
+        mounted(){
+            this.getData()
+        }
+    }
+</script>
 
 <style scoped lang="scss">
 @import '../assets/sass/_base.scss';
