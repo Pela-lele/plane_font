@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
-
-
 
 
 import index from '@/pages/index'
@@ -19,6 +16,7 @@ import zcggDetail from '@/pages/tzgg/zcggDetail'
 
 /*监督举报*/
 import jdjb from '@/pages/jdjb/jdjb'
+import fxjhAroundList from '@/pages/jdjb/fxjhAroundList'
 import fxbbjb from '@/pages/jdjb/fxbbjb'
 import fxbbjbDetail from '@/pages/jdjb/fxbbjbDetail'
 
@@ -44,7 +42,7 @@ import fxzsDetail from '@/pages/fxzs/fxzsDetail'
 /*飞行计划列表*/
 import fxjhList from '@/pages/fxjh/fxjhList'
 /*周围的飞行计划列表*/
-import fxjhAroundList from '@/pages/fxjh/fxjhAroundList'
+
 /*无人机管理*/
 import wrjgl from '@/pages/wrjgl/wrjgl'
 import wrjglDetail from '@/pages/wrjgl/wrjglDetail'
@@ -57,12 +55,12 @@ import wrjPicTip from '@/pages/wrjgl/wrjPicTip'
 
 
 
-
 Vue.use(Router)
-
+// 开启debug模式
+Vue.config.debug = true;
 export default new Router({
-  // mode: 'history',
-  base: '/plane/',
+  mode: 'history',
+  // base: '/plane/',
   routes: [
     {
       path: '/',
@@ -71,31 +69,32 @@ export default new Router({
     },{
     	 path: '/fxbb',
       	name: 'fxbb',
-      	component: fxbb
-    },{
-       path: '/fxbbDetail',
-        name: 'fxbbDetail',
-        component: fxbbDetail
-    },{
+        meta:{
+          keepAlive: true
+        },
+      	component: fxbb,
+      children:[
+        {path:'fxbbDetail',component:fxbbDetail},
+      ]
+    },
+    {
         path: '/tzgg',
         name: 'tzgg',
-        component: tzgg
-    },{
+        component: tzgg,
+    },
+    {
         path: '/zcggDetail',
         name: 'zcggDetail',
         component: zcggDetail
-    },{
+    },
+    {
         path: '/jdjb',
         name: 'jdjb',
-        component: jdjb
-    },{
-        path: '/fxbbjb',
-        name: 'fxbbjb',
-        component: fxbbjb
-    },{
-      path: '/fxbbjbDetail',
-      name: 'fxbbjbDetail',
-      component: fxbbjbDetail
+        component: jdjb,
+      children:[
+        {path:'fxbbjb',component:fxbbjb},
+        {path:'fxbbjbDetail',component:fxbbjbDetail},
+        {path:'fxjhAroundList',component:fxjhAroundList}]
     },{
         path: '/code',
         name: 'code',
@@ -103,75 +102,47 @@ export default new Router({
     },{
       path: '/grxx',
       name: 'grxx',
-      component: grxx
-    },{
-      path: '/grxxList',
-      name: 'grxxList',
-      component: grxxList
+      component: grxx,
+      children:[
+        {path:'grxxList',component:grxxList},
+        {path:'grxxEditInfo',component:grxxEditInfo},
+        {path:'grxxEditPwd',component:grxxEditPwd},
+        {path: 'yhzcTel', component: yhzcTel},
+        {path: 'yhzcType', component: yhzcType},
+        {path: 'yhzcPerson', component: yhzcPerson},
+        {path: 'yhzcPersonTip', component: yhzcPersonTip},
+        {path: 'yhzcCompany', component: yhzcCompany},
+        {path: 'yhzcPwd', component: yhzcPwd},
+      ]
     },{
       path: '/map/:type',
       name: 'map',
+      meta:{
+        keepAlive: true
+      },
       component: map
     },{
       path: '/fxzsList',
         name: 'fxzsList',
+        meta:{
+          keepAlive: true
+        },
         component: fxzsList
-    },{
-      path: '/fxjhAroundList',
-      name: 'fxjhAroundList',
-      component: fxjhAroundList
     },{
       path: '/wrjxhList',
         name: 'wrjxhList',
+        meta:{
+          keepAlive: true
+        },
         component: wrjxhList
     },{
-      path: '/yhzcTel',
-      name: 'yhzcTel',
-      component: yhzcTel
-    },{
-      path: '/yhzcType',
-      name: 'yhzcType',
-      component: yhzcType
-    },{
-      path: '/yhzcPerson',
-      name: 'yhzcPerson',
-      component: yhzcPerson
-    },{
-      path: '/yhzcPersonTip',
-      name: 'yhzcPersonTip',
-      component: yhzcPersonTip
-    },{
-      path: '/yhzcCompany',
-      name: 'yhzcCompany',
-      component: yhzcCompany
-    },{
-      path: '/yhzcPwd',
-      name: 'yhzcPwd',
-      component: yhzcPwd
-    },{
-      path: '/grxxEditInfo',
-      name: 'grxxEditInfo',
-      component: grxxEditInfo
-    },{
-      path: '/grxxEditPwd',
-      name: 'grxxEditPwd',
-      component: grxxEditPwd
-    },{
       path: '/fxzs',
-      name: 'fxzs',
-      component: fxzs
-    },{
-      path: '/fxzsAdd',
-      name: 'fxzsAdd',
-      component: fxzsAdd
-    },{
-      path: '/fxzsSelZs',
-      name: 'fxzsSelZs',
-      component: fxzsSelZs
-    },{
-      path: '/fxzsDetail',
-      name: 'fxzsDetail',
-      component: fxzsDetail
+      component: fxzs,
+      children:[
+        {path: 'fxzsDetail', component: fxzsDetail},
+        {path: 'fxzsAdd', component: fxzsAdd},
+        {path: 'fxzsSelZs', component: fxzsSelZs},
+      ]
     },{
       path: '/fxjhList',
       name: 'fxjhList',
@@ -179,33 +150,16 @@ export default new Router({
     },{
       path: '/wrjgl',
       name: 'wrjgl',
-      component: wrjgl
-    },{
-      path: '/wrjglDetail',
-      name: 'wrjglDetail',
-      component: wrjglDetail
-    },{
-      path: '/wrjglAdd',
-      name: 'wrjglAdd',
-      component: wrjglAdd
-    },{
-      path: '/wrjglProductor',
-      name: 'wrjglProductor',
-      component: wrjglProductor
-    },{
-      path: '/wrjglType',
-      name: 'wrjglType',
-      component: wrjglType
-    },{
-      path: '/wrjglTip',
-      name: 'wrjglTip',
-      component: wrjglTip
-    },{
-      path: '/wrjPicTip',
-      name: 'wrjPicTip',
-      component: wrjPicTip
-    },
-
-
+      component: wrjgl,
+      children:[
+        {path:'wrjglDetail',component:wrjglDetail},
+        {path:'wrjglAdd',component:wrjglAdd},
+        {path:'wrjglProductor',component:wrjglProductor},
+        {path:'wrjglType',component:wrjglType},
+        {path:'wrjglTip',component:wrjglTip},
+        {path:'wrjglType',component:wrjglType},
+        {path:'wrjPicTip',component:wrjPicTip},
+      ]
+    }
   ]
 })

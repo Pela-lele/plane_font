@@ -1,19 +1,23 @@
-import axios from 'axios'
-import config from './config'
-import qs from 'qs'
-
+import axios from './index'
+var $ajax = axios.ajax;
 export default {
-	getList (param) {
-		config.data.Method="get";
-		config.data.CustData.Data = param;
-		return axios.post('/Router',{},config);
-	}
-	getCurrency (param) {
-		console.log(config);
-		var commonData = Object.create(config);
-		
-		config.data.Method="get";
-		config.data.CustData.Data = param;
-		return axios.post('/Router',{},config);
-	}
+	//获取飞行计划
+
+	getReportrecordList (param) {
+		return $ajax.get("/mDrone/app/reportrecord/page.action",{
+			params: param
+		})
+	},
+  saveReportrecord (data) {
+    return $ajax.post("/mDrone/app/reportrecord/save.action",data)
+  },
+
+  //无人机管理
+  //获取无人机厂商型号
+  getDronemList(param){
+    return $ajax.get("/mDrone/app/dronem/page.action",{
+      params: param
+    })
+  },
+
 };

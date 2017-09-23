@@ -29,7 +29,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/mDrone': {
-            target: 'http://10.1.14.65/',
+            // target: 'http://10.1.14.65/',
+            target: 'http://10.1.14.57:8080/',
             changeOrigin: true,
             pathRewrite: {
                 '^/mDrone': '/mDrone'

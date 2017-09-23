@@ -37,11 +37,14 @@
 </template>
 
 <script>
+    import map from '@/api/map';
     export default {
         methods: {
             getData(){
-               this.$ajax.get("/mDrone/dronem/list.action",{params: { 'type': '1' }})
+                // console.log(map)
+               // this.$ajax.get("/mDrone/dronem/list.action",{params: { 'type': '1' }})
             }
+
         },
         mounted(){
             this.getData()

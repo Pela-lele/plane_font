@@ -128,7 +128,7 @@
 	   		</div> -->
 	   		<a class="code" @click="submit"></a>
     </div>
-    
+
 </template>
 <script>
 	import bus from '@/assets/eventBus';
@@ -149,7 +149,7 @@
 				console.log(selectObj);
 				self.formData.fxzsObj = selectObj;
 			});
-			
+
 			bus.$on("wrjxh",function(selectObj){
 				self.formData.wrjxhObj = selectObj;
 			});

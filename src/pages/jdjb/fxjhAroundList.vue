@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <ul class="mlist">
-      <router-link :to="{path:'/wrjglDetail'}" tag="div">
+      <router-link :to="{path:'/fxbbjb'}" tag="div">
         <div class="list-cell" v-for="item in datas" :class="{selected: selectObj[item.id]}">
           <div class="list-cell-wrapper">
             <div class="list-cell-image">
@@ -9,7 +9,7 @@
             </div>
             <div class="list-cell-title">
               <span class="list-cell-text">{{item.name}}</span>
-              <span class="list-cell-label">{{item.desc}}</span>
+              <span class="list-cell-label":class="item.fontColor">{{item.desc}}</span>
             </div>
 
           </div>
@@ -17,12 +17,6 @@
         </div>
       </router-link>
     </ul>
-    <router-link :to="{path:'/wrjgl/wrjglAdd'}" tag="div">
-      <div class="common-footer">
-        <span class="common-footer-btn">添加无人机</span>
-      </div>
-    </router-link>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -35,38 +29,43 @@
         selectNum: 0,
         datas: [{
           id:"1",
-          name: "S8029345",
-          desc: "大疆PHANTOM4 PRO",
+          name: "2017-08-28 15:00",
+          desc: "待审核",
+          fontColor:"approve"
         },{
           id:"2",
-          name: "S8029345",
-          desc: "大疆PHANTOM4 PRO",
+          name: "2017-08-28 15:00",
+          desc: "已审核",
+          fontColor:""
         },{
           id:"3",
-          name: "S8029345",
-          desc: "大疆PHANTOM4 PRO",
+          name: "2017-08-28 15:00",
+          desc: "待审核",
+          fontColor:"approve"
         },{
           id:"4",
-          name: "S8029345",
-          desc: "大疆PHANTOM4 PRO",
+          name: "2017-08-28 15:00",
+          desc: "已驳回",
+          fontColor:"reject"
         },{
           id:"5",
-          name: "S8029345",
-          desc: "大疆PHANTOM4 PRO",
+          name: "2017-08-28 15:00",
+          desc: "待审核",
+          fontColor:"approve"
         }]
       }
     },
   }
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">
-  @import '../../assets/sass/_base.scss';
+  @import '../../assets/sass/_base';
 
   .wrapper {
     padding-bottom: 48px;
     .list-cell {
-      .iconfont {
-        display: block;
-      }
+        .iconfont {
+          display: block;
+        }
     }
     .approve{
       color: $theme-color;

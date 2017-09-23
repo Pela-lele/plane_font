@@ -32,6 +32,13 @@
           <i class="iconfont icon-enter arrow-right"></i>
         </div>
       </router-link>
+      <router-link :to="{path:'/wrjgl'}" tag="div">
+        <div class="grxx-list">
+          <i class="iconfont icon-wurenji-icon icon-list"></i>
+          <span>单位成员管理</span>
+          <i class="iconfont icon-enter arrow-right"></i>
+        </div>
+      </router-link>
       <router-link :to="{path:'/grxxEditInfo'}" tag="div">
         <div class="grxx-list">
           <i class="iconfont icon-gerenxinxi icon-list"></i>
@@ -100,7 +107,7 @@
       .grxx-list{
         background: #ffffff;
         height: 48px;
-        margin: 10px 0;
+        /*margin: 10px 0;*/
         border-bottom: 1px solid $border-color;
         i{
           line-height: 48px;

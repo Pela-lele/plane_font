@@ -2,7 +2,8 @@
   <div class="wrapper">
 
       <ul class="mlist">
-        <router-link :to="{path:'/fxzsDetail'}" tag="ul">
+      <!-- <router-link to="/parent/children" tag="button" class="">点我</router-link> -->
+        <router-link to="/fxzs/fxzsDetail" tag="ul">
         <div class="list-cell">
           <div class="list-cell-wrapper" >
             <div class="list-cell-image">
@@ -30,11 +31,12 @@
         </router-link>
       </ul>
 
-    <router-link :to="{path:'/fxzsAdd'}" tag="div">
+    <router-link :to="{path:'/fxzs/fxzsAdd'}" tag="div">
       <div class="common-footer">
         <span class="common-footer-btn">添加证书</span>
       </div>
     </router-link>
+    <router-view></router-view>
   </div>
 </template>
 <script>

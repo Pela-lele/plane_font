@@ -6,7 +6,9 @@
 		<div class="map-footer" @click="goFxjh">
 			周边2起飞行计划
 		</div>
+    <router-view></router-view>
 	</div>
+
 
 </template>
 

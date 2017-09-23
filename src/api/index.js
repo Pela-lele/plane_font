@@ -12,17 +12,17 @@ var Axios = axios.create({
   withCredentials: true, // 是否允许带cookie这些
   headers: {
     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    // "Content-Type": "application/json"
   }
 });
 
 Axios.interceptors.request.use(function(config){
 	// Do something before request is sent 
 	console.log(config)
-	/*if (
-		config.method === "post"
-	) {
+	if (config.method === "post") {
 		config.data = qs.stringify(config.data);
-	}*/
+		// config.data = JSON.stringify(config.data)
+	}
 	return config;
 }, function (error) {
 	// Do something with request error 
@@ -33,7 +33,7 @@ Axios.interceptors.request.use(function(config){
 Axios.interceptors.response.use(function (response) {
 	// Do something with response data 
 	if (response.data && response.data.code !== 0) {
-		alert("后台报错")
+		// alert("后台报错")
 		return Promise.reject(response);
 	}
 	return response;
@@ -45,5 +45,6 @@ Axios.interceptors.response.use(function (response) {
 export default {
 	install(Vue){
 		Object.defineProperty(Vue.prototype, "$ajax", { value: Axios });
-	}
+	},
+	"ajax":Axios
 }

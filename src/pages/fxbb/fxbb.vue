@@ -45,13 +45,13 @@
 	       	</router-link>
 	       	<!-- </ul> -->
 	    </div>
-	    <div class="group">
+	    <div class="group" v-if="Object.keys(formData.wrjxhObj).length>0">
 	    	<label>架数</label>
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
 	       				<!-- <input type="text" placeholder="请输入架数"/> -->
-	       				<span>2架</span>
+	       				<span>{{Object.keys(formData.wrjxhObj).length}}架</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -61,7 +61,7 @@
        		<ul class="selection-list">
 	       		<li class="selection" @click="openTimepicker($event,'startTime')">
 	       			<div class="input-box">
-	       				<span>{{! startTime==""?startTime:"请选择开始时间"}}</span>
+	       				<span>{{! formData.startTime==""?formData.startTime:"请选择开始时间"}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -71,7 +71,7 @@
        		<ul class="selection-list">
 	       		<li class="selection" @click="openTimepicker($event,'endTime')">
 	       			<div class="input-box">
-						<span>{{! endTime==""?endTime:"请选择结束时间"}}</span>
+						<span>{{! formData.endTime==""?formData.endTime:"请选择结束时间"}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -79,44 +79,40 @@
 	    <div class="group">
 	    	<label>飞行区域</label>
        		<ul class="selection-list">
-	       		<!-- <li class="selection"> -->
-	       		<keep-alive>
-	       		<router-link :to="{path:'/map/area'}" tag="li" class="selection">
+	       		<li class="selection" @click="goMapPage('area')">
+	       		<!-- <router-link :to="{path:'/map/area'}" tag="li" class="selection"> -->
 	       			<div class="input-box">
-	       				<span>秦淮区夫子庙</span>
+	       				<span>{{flightArea.laititude == ""||flightArea.longitude == "" ? "请选择飞行区域" : flightArea.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
-	       		</router-link>
-	       		</keep-alive>
-	       		<!-- </li> -->
+	       		<!-- </router-link> -->
+	       		</li>
 	       	</ul>
 	    </div>
 	    <div class="group">
 	    	<label>起飞点</label>
        		<ul class="selection-list">
-	       		<!-- <li class="selection"> -->
-	       		<keep-alive>
-	       		<router-link :to="{path:'/map/start'}" tag="li" class="selection">
+	       		<li class="selection" @click="goMapPage('start')">
+	       		<!-- <router-link :to="{path:'/map/start'}" tag="li" class="selection"> -->
 	       			<div class="input-box">
-	       				<span>秦淮区夫子庙</span>
+	       				<span>{{flightStartLocation.address == "" ? "请选择起飞点" : flightStartLocation.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
-	       		</router-link>
-	       	</keep-alive>
-	       		<!-- </li> -->
+	       		<!-- </router-link> -->
+	       		</li>
 	       	</ul>
 	    </div>
 	    <div class="group">
 	    	<label>降落点</label>
        		<ul class="selection-list">
-	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map/end'}" tag="li" class="selection">
+	       		<li class="selection" @click="goMapPage('end')">
+	       		<!-- <router-link :to="{path:'/map/end'}" tag="li" class="selection"> -->
 	       			<div class="input-box">
-	       				<span>秦淮区夫子庙</span>
+	       				<span>{{flightEndLocation.address == "" ? "请选择降落点" : flightEndLocation.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
-	       		</router-link>
-	       		<!-- </li> -->
+	       		<!-- </router-link> -->
+	       		</li>
 	       	</ul>
 	    </div>
 	    <div class="group">
@@ -124,7 +120,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入飞行高度"/>
+	       				<input type="text" placeholder="请输入飞行高度" v-model="formData.flightHeight"/>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -135,7 +131,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box" @click="sheetVisible = true">
-	       				<span>{{formData.fxyt || "请选择飞行用途"}}</span>
+	       				<span>{{formData.flightPurpose || "请选择飞行用途"}}</span>
 	       				<!-- <input type="text" placeholder="请输入飞行用途" readonly="" /> -->
 	       			</div>
 	       		</li>
@@ -146,7 +142,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入联系电话" v-model="formData.phone"/>
+	       				<input type="text" placeholder="请输入联系电话" v-model="formData.telephone"/>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -155,31 +151,52 @@
 	    	<a @click="submitForm" class="sumitBtn">提交</a>
 	    </div>
 	    <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
+	    <router-view></router-view>
     </div>
     
 </template>
 <script>
 	import bus from '@/assets/eventBus';
 	import { Datetime, Group, XButton } from 'vux'
+	import { Toast } from 'mint-ui';
+	import api from '@/api/API.js';
+	// import fxzsList from "./fxzsList.vue";
 	export default {
 		components: {
 			Datetime,
 			Group,
-			XButton
+			XButton,
+			Toast
 		},
 		data() {
 			return {
 				sheetVisible: false,//飞行用途选框显隐
 				actions: [],//飞行用途选择
-				startPickerValue: new Date(),
-				endPickerValue: new Date(),
-				startTime:"",
-				endTime:"",
 				formData:{
-					phone:"",
-					fxyt:"",
+					telephone:"",//联系电话
+					flightPurpose:"",//飞行用途
+					startTime: "2017-09-20 15:30",
+					endTime: "2017-09-23 15:30",
 					fxzsObj:{},
-					wrjxhObj:{}
+					wrjxhObj:{},
+					flightHeight:""//飞行高度
+					
+				},
+				flightArea: {
+					"address":"",
+					"laititude": "",
+			        "longitude": "",
+			        "radius": 0
+				},
+				flightStartLocation:{
+					"address":"",
+					"longitude":"",
+					"laititude":""
+				},
+				flightEndLocation:{
+					"address":"",
+					"longitude":"",
+					"laititude":""
 				}
 			}
 		},
@@ -187,7 +204,7 @@
 		methods: {
 			openTimepicker(e,typeTime) {
 				var self = this;
-				console.log(arguments)
+				// console.log(arguments)
 				this.$vux.datetime.show({
 			        cancelText: '取消',
 			        confirmText: '确定',
@@ -197,27 +214,107 @@
 			        dayRow: "{value}日",
 			        value: '2017-05-20 18',
 			        onConfirm (val) {
-			          self[typeTime] = val;
+			          self.formData[typeTime] = val;
 			        }
 			      })
 			},
 			setFxyt(val) {
-				this.formData.fxyt = val.name;	
+				this.formData.flightPurpose = val.name;	
 			},
 			submitForm() {
-				this.$router.replace("/")
+				var self = this;
+				var data = {
+				    "licenseIds": "1,2,3",
+				    "droneIds": "3,2,1",
+				    "reportRecord.flightArea": JSON.stringify({
+				        "laititude": "118.364545",
+				        "longitude": "32.544654",
+				        "radius": "500",
+				        "address": "中国江苏省南京市建邺区云龙山路88号"
+				    }),
+				    "reportRecord.flightStartLocation": JSON.stringify({
+				        "laititude": "118.364545",
+				        "longitude": "32.544654",
+				        "address": "中国江苏省南京市建邺区云龙山路88号"
+				    }),
+				    "reportRecord.flightEndLocation": JSON.stringify({
+				        "laititude": "118.364545",
+				        "longitude": "32.544654",
+				        "address": "中国江苏省南京市建邺区云龙山路88号"
+				    }),
+				    "reportRecord.flightHeight": "500",
+				    "reportRecord.flightStartTime": "2017-09-01 12:00:00",
+				    "reportRecord.flightEndTime": "2017-09-01 13:00:00",
+				    "reportRecord.flightPurpose": "拍摄风景",
+				    "reportRecord.telephone": "18888888888"
+				};
+				api.saveReportrecord(data).then(function(res){
+					var resData = res.data;
+					if(resData && resData.code==0){
+						self.$router.replace("/")
+					}
+				})
+				/*this.$ajax.post("/mDrone/app/reportrecord/save.action",data).then(function(res){
+					var resData = res.data;
+					if(resData && resData.code==0){
+						this.$router.replace("/")
+					}
+				})*/
+				// this.$router.replace("/")
+			},
+			goMapPage(pageType) {
+				if(pageType == "area"){
+					if(!this.formData.startTime){
+						Toast('请选择开始时间');
+					}else if(!this.formData.endTime){
+						Toast('请选择结束时间');
+					}else{
+						this.$router.push({
+							path: "/map/area",
+							query: {
+								"beginTime":this.formData.startTime,
+								"endTime":this.formData.endTime
+							}
+						})	
+					}
+					
+				}else{
+					if(!this.flightArea.laititude || !this.flightArea.longitude || !this.flightArea.radius){
+						Toast('请选择飞行区域');
+					}else{
+						this.$router.push({
+							path: "/map/"+pageType
+						})
+					}
+					
+					
+				}
 			}
 		},
-		beforeRouteLeave(to, from, next) {
+		/*beforeRouteLeave(to, from, next) {
+			console.log(this)
 			console.log(to, from);
 			if(to.name == "index"){
-				console.log("销毁")
-				// this.$destroy()
+				console.log("销毁");
+				console.log(this.$route)
+				this.$route.meta.keepAlive = false;
+				this.$destroy()
+
 			}
 			next();
-		},
+		},*/
+		/*beforeRouteEnter(to, from, next){
+			to.meta.keepAlive = true;
+
+			next(function(vm){
+				console.log(vm)
+				vm.destory = false;
+			})
+		},*/
 		mounted(){
 			console.log("mounted");
+			console.log(this);
+			// console.log(this.$store.state.fxbb.doing)
 			var self = this;
 			bus.$on("fxzs",function(selectObj){
 				console.log(selectObj);
@@ -226,6 +323,19 @@
 			
 			bus.$on("wrjxh",function(selectObj){
 				self.formData.wrjxhObj = selectObj;
+			});
+			//
+			bus.$on("flightArea",function(flightArea){
+				console.log(flightArea)
+				self.flightArea = flightArea;
+			});
+			bus.$on("flightStartLocation",function(flightStartLocation){
+				console.log(flightStartLocation)
+				self.flightStartLocation = flightStartLocation;
+			});
+			bus.$on("flightEndLocation",function(flightEndLocation){
+				console.log(flightEndLocation)
+				self.flightEndLocation = flightEndLocation;
 			});
 			this.actions = [{
 		        name: '拍摄风景',
@@ -236,6 +346,9 @@
 		        value:2,
 		        method: this.setFxyt
 		    }];
+		},
+		deactivated(){
+			// this.$destroy()
 		}
 	}
 </script>

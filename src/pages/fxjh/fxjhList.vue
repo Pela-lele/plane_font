@@ -1,67 +1,140 @@
 <template>
   <div class="wrapper">
-    <ul class="mlist">
+  <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px','overflow':'scroll' }">
+    <mt-loadmore :top-method="loadTop"  @top-status-change="handleTopChange"  :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore" @autoFill="false">
+      <ul class="mlist">
       <router-link :to="{path:'/fxbbDetail'}" tag="div">
-        <div class="list-cell" v-for="item in datas" :class="{selected: selectObj[item.id]}">
+        <div class="list-cell" v-for="item in datas">
           <div class="list-cell-wrapper">
             <div class="list-cell-image">
               <img src="../../assets/img/wrj/demo3.jpg" width="100%" height="100%">
             </div>
             <div class="list-cell-title">
-              <span class="list-cell-text">{{item.name}}</span>
-              <span class="list-cell-label":class="item.fontColor">{{item.desc}}</span>
+              <span class="list-cell-text">{{item.flightStartTimeStr}}</span>
+              <span class="list-cell-label" :class="item.fontColor">{{item.status | transStatus}}</span>
             </div>
 
           </div>
           <i class="list-cell-allow-right iconfont icon-enter"></i>
         </div>
       </router-link>
-    </ul>
+      </ul>
+    </mt-loadmore>
+  </div>
   </div>
 </template>
 
 <script>
   import bus from '@/assets/eventBus';
+  import api from '@/api/API';
   export default {
     data() {
       return {
-        selectObj: {},
-        selectNum: 0,
-        datas: [{
-          id:"1",
-          name: "2017-08-28 15:00",
-          desc: "待审核",
-          fontColor:"approve"
-        },{
-          id:"2",
-          name: "2017-08-28 15:00",
-          desc: "已审核",
-          fontColor:""
-        },{
-          id:"3",
-          name: "2017-08-28 15:00",
-          desc: "待审核",
-          fontColor:"approve"
-        },{
-          id:"4",
-          name: "2017-08-28 15:00",
-          desc: "已驳回",
-          fontColor:"reject"
-        },{
-          id:"5",
-          name: "2017-08-28 15:00",
-          desc: "待审核",
-          fontColor:"approve"
-        }]
+        pager:{
+          pageNo:1,
+          pageSize:10,
+          total:0//从后台获取
+        },
+        datas:[],//fontColor:"approve""reject"
+        list: [],
+        topStatus: '',
+        wrapperHeight: 0,
+        allLoaded: false,
+        bottomStatus: '',
       }
     },
+    filters:{
+      transStatus(status) {//审核状态 0待审核1审核中2已通过3已驳回4已取消
+        var result = ""
+        switch(status) {
+          case 0:
+            result = "待审核";
+            break;
+          case 1:
+            result = "审核中";
+            break;
+          case 2:
+            result = "已通过";
+            break;
+          case 3:
+            result = "已驳回";
+            break;
+          case 4:
+            result = "已取消";
+            break;
+        }
+        return result;
+      }
+    },
+    methods: {
+      _initPage() {
+        var self = this;
+        this.loadData().then(function(res){
+            self.wrapperHeight = document.documentElement.clientHeight - self.$refs.wrapper.getBoundingClientRect().top;
+        })
+
+      },
+      loadData() {
+        var self = this;
+        var xhr = api.getReportrecordList({
+          "page.pageNo":self.pager.pageNo,
+          "page.pageSize":self.pager.pageSize
+        }).then(function(res){
+          var resDate = res.data;
+          if(resDate && resDate.code == 0){
+            var data = resDate.aaData;
+            var total = self.pager.total = resDate.iTotalDisplayRecords;
+            self.datas = self.datas.concat(data);
+            if(self.pager.pageNo * self.pager.pageSize >= self.pager.total){
+              self.allLoaded = true;
+            }else{
+              self.allLoaded = false;
+            }
+          }
+        })
+        
+        return xhr;
+      },
+      handleTopChange(status) {//drop->loading->pull
+        this.topStatus = status;
+        console.log("handleTopChange="+status)
+      },
+      handleBottomChange(status) {//drop->pull
+        this.bottomStatus = status;
+        console.log("handleBottomChange="+status)
+      },
+      loadTop() {
+        console.log("loadTop")
+        var self = this;
+        this.pager.pageNo = 1;
+        this.datas = [];
+        this.loadData();
+        this.$refs.loadmore.onTopLoaded();
+      },
+
+      loadBottom() {
+        console.log("loadBottom");
+        var self = this;
+        this.pager.pageNo++;
+        this.loadData();
+        this.$refs.loadmore.onBottomLoaded();
+
+      }
+    },
+    mounted(){
+      this._initPage();
+      // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+    }
   }
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">
   @import '../../assets/sass/_base.scss';
 
   .wrapper {
-    padding-bottom: 48px;
+    .page-loadmore-wrapper{
+      height: 100%;
+      overflow: scroll;
+    }
     .list-cell {
         .iconfont {
           display: block;

@@ -4,7 +4,7 @@
     <div class="group">
       <label>证书类型</label>
       <ul class="selection-list">
-        <router-link :to="{path:'/fxzsSelZs'}" tag="li">
+        <router-link :to="{path:'/fxzs/fxzsSelZs'}" tag="li">
         <li class="selection">
           <span class="selected">{{selectItem}}</span>
             <i class="iconfont icon-enter common-right"></i>
@@ -99,7 +99,7 @@
       <span class="absolute-footer-btn">提交</span>
     </div>
 
-    <mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText=""></mt-actionsheet>
+    <mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
 
 
   </div>

@@ -116,7 +116,9 @@
         var reader = new FileReader();
         var vm = this;
 
-        reader.onload = (e) => {
+        console.log(file.size);
+
+        reader.onload =function (e) {
           vm.image = e.target.result;
         };
         reader.readAsDataURL(file);

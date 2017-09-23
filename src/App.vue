@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <keep-alive>
-      <router-view></router-view>
+     <!-- include="fxbb,map,fxzsList,wrjxhList" -->
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+      <!-- <router-view></router-view> -->
     </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 

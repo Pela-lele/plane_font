@@ -4,7 +4,7 @@
     <div class="group">
       <label>品牌</label>
       <ul class="selection-list">
-        <router-link :to="{path:'/wrjglProductor'}" tag="li">
+        <router-link :to="{path:'/wrjgl/wrjglProductor'}" tag="li">
         <li class="selection">
           <span class="selected">{{selectPro}}</span>
             <i class="iconfont icon-enter common-right"></i>
@@ -15,7 +15,7 @@
     <div class="group">
       <label>型号</label>
       <ul class="selection-list">
-        <router-link :to="{path:'/wrjglType'}" tag="li">
+        <router-link :to="{path:'/wrjgl/wrjglType'}" tag="li">
           <li class="selection">
             <span class="selected">{{selectType}}</span>
             <i class="iconfont icon-enter common-right"></i>
@@ -80,8 +80,8 @@
       <span class="absolute-footer-btn">提交</span>
     </div>
 
-    <mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText=""></mt-actionsheet>
-    <mt-actionsheet :actions="actions1" v-model="sheetVisible1" cancelText=""></mt-actionsheet>
+    <mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
+    <mt-actionsheet :actions="actions1" v-model="sheetVisible1" cancelText="取消"></mt-actionsheet>
 
 
   </div>

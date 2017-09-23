@@ -31,7 +31,7 @@
 		        	</div>
 		        </div>
 		    </div>
-	        
+
 	      </mt-tab-container-item>
 	      <mt-tab-container-item id="tab-container2" class="tab-item-container">
 	      	<div class="list-cell">
@@ -51,7 +51,7 @@
 		        </div>
 		    </div>
 	      </mt-tab-container-item>
-	    </mt-tab-container>		
+	    </mt-tab-container>
 	</div>
 </template>
 
@@ -62,7 +62,7 @@ export default {
       selected: 'tab-container1'
     };
   }
-};	
+};
 </script>
 
 <style scoped lang="scss">
@@ -104,11 +104,11 @@ export default {
 				    -webkit-transform: scale3d(0, 1, 1);
 				    transform: scale3d(0, 1, 1);
 				    -webkit-transition: -webkit-transform 0.1s;
-				    transition: transform 0.1s;	
+				    transition: transform 0.1s;
 				    background: $theme-color;
 					height: 2px;
 					width: 70%;
-					left: 13%;				
+					left: 13%;
 				}
 				.tab-label{
 					display: inline-block;
@@ -122,7 +122,7 @@ export default {
 				}
 			}
 		}
-		
+
 		.list-cell-wrapper{
 			.right-time{
 				float: right;

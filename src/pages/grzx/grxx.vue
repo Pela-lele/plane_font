@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="footer-bg">
-        <router-link :to="{path:'/grxxList'}" tag="span">
+        <router-link :to="{path:'/grxx/grxxList'}" tag="span">
         <span class="log-in">登录</span>
         </router-link>
         <div class="res-text">
@@ -32,6 +32,7 @@
       </div>
 
     </div>
+    <router-view></router-view>
 
   </div>
 </template>

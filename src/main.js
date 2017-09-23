@@ -55,6 +55,18 @@ store.registerModule('vux', {
     }
   }
 })
+/*store.registerModule('fxbb', {
+  state: {
+
+  },
+  mutations: {
+
+  },
+  actions: {
+
+  }
+
+})*/
 
 Vue.use(vuexI18n.plugin, store)
 Vue.i18n.set('zh-CN')
