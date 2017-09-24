@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 //import MuseUI from 'muse-ui'
 //import 'muse-ui/dist/muse-ui.css'
 //import 'muse-ui/dist/theme-carbon.css' // 使用 carbon 主题
@@ -15,45 +16,6 @@ import './assets/sass/_base.scss'
 import utils from './utils/utils'
 
 
-import VueI18n from 'vuex-i18n'
-
-Vue.use(VueI18n)
-
-
-import Vuex from 'vuex'
-Vue.use(Vuex)
-import vuexI18n from 'vuex-i18n'
-var store = new Vuex.Store({
-  modules: {
-    i18n: vuexI18n.store
-  }
-})
-store.registerModule('vux', {
-  state: {
-    demoScrollTop: 0,
-    isLoading: false,
-    direction: 'forward'
-  },
-  mutations: {
-    updateDemoPosition (state, payload) {
-      state.demoScrollTop = payload.top
-    },
-    updateLoadingStatus (state, payload) {
-      state.isLoading = payload.isLoading
-    },
-    updateDirection (state, payload) {
-      state.direction = payload.direction
-    }
-  },
-  actions: {
-    updateDemoPosition ({commit}, top) {
-      commit({type: 'updateDemoPosition', top: top})
-    }
-  }
-})
-
-Vue.use(vuexI18n.plugin, store)
-Vue.i18n.set('zh-CN')
 
 // plugins
 import { ConfigPlugin, BusPlugin, DatetimePlugin, LocalePlugin, DevicePlugin, ToastPlugin, AlertPlugin, ConfirmPlugin, LoadingPlugin, WechatPlugin, AjaxPlugin, AppPlugin } from 'vux'

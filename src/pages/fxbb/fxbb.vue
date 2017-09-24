@@ -6,12 +6,12 @@
     		<label>飞行证书</label>
     		<!-- <ul class="selection-list"> -->
     		<router-link :to="{path:'/fxzsList'}" tag="ul" class="selection-list">
-	    		<template v-if="Object.keys(formData.fxzsObj).length>0">
-	    			<li class="selection" v-for="(item, key, index) in formData.fxzsObj">
+	    		<template v-if="chooseFxzsList.length>0">
+	    			<li class="selection" v-for="(item, key, index) in chooseFxzsList">
 		       			<div class="input-box">
 		       				<span>{{item.name}}</span>
 		       			</div>
-		       			<i class="iconfont icon-add" v-if="index == Object.keys(formData.fxzsObj).length-1"></i>
+		       			<i class="iconfont icon-add" v-if="index == chooseFxzsList.length-1"></i>
 		       		</li>
 	    		</template>
 	    		<template v-else>
@@ -161,6 +161,7 @@
 <script>
 	import bus from '@/assets/eventBus';
 	import { Datetime, Group, XButton } from 'vux'
+	import {mapState, mapMutations} from 'vuex'
 	export default {
 		components: {
 			Datetime,
@@ -183,8 +184,16 @@
 				}
 			}
 		},
-		
+		computed:{
+             ...mapState([
+                'chooseFxzsList'
+            ]),
+             
+        },
 		methods: {
+			...mapMutations([
+            	'DELETE_FXBBFORM'
+            ]),
 			openTimepicker(e,typeTime) {
 				var self = this;
 				console.log(arguments)
@@ -213,11 +222,15 @@
 			if(to.name == "index"){
 				console.log("销毁")
 				// this.$destroy()
+				this.DELETE_FXBBFORM();
+
 			}
 			next();
 		},
 		mounted(){
 			console.log("mounted");
+			// this.chooseFxbbList
+			console.log(this.chooseFxzsList)
 			var self = this;
 			bus.$on("fxzs",function(selectObj){
 				console.log(selectObj);
@@ -236,6 +249,7 @@
 		        value:2,
 		        method: this.setFxyt
 		    }];
+
 		}
 	}
 </script>

@@ -27,10 +27,13 @@
 
 <script>
 	import bus from '@/assets/eventBus';
+	import {mapState, mapMutations} from 'vuex'
 	export default {
 		data() {
 			return {
+				chooseFxzsIds: [],
 				selectObj: {},
+				selectList: [],
 				selectNum: 0,
 				datas: [{
 					id:"1",
@@ -83,10 +86,28 @@
 				}]
 			}
 		},
+		computed:{
+             ...mapState([
+                'chooseFxzsList'
+            ]),
+             
+        },
+        mounted() {
+        	console.log("fxzsListMounted")
+        	console.log(this.selectObj)
+        	for(var i=0,len=this.chooseFxzsList.length;i<len;i++){
+        		// this.chooseFxzsIds.push(this.chooseFxzsList[i].id);
+        		this.selectObj[this.chooseFxzsList[i].id] = this.chooseFxzsList[i];
+        		this.selectNum++
+        	}
+        	console.log(this.selectObj);
+        },
 		methods: {
+			...mapMutations([
+            	'RECORD_FXZSLIST'
+            ]),
 			toggleSelect(item) {
 				var selectObj = this.selectObj;
-				console.log(item)
 				if(this.selectObj[item.id]){
 					this.$delete(this.selectObj,item.id);
 					this.selectNum--;
@@ -96,8 +117,11 @@
 				}
 			},
 			submit() {
-				console.log("emit")
-				bus.$emit("fxzs",this.selectObj);
+				// bus.$emit("fxzs",this.selectObj);
+				// this.chooseFxbbList.push(Object.values(this.selectObj))
+				// this.chooseFxzsList = Object.values(this.selectObj);
+				this.RECORD_FXZSLIST(Object.values(this.selectObj))
+				console.log(this.chooseFxzsList)
 				this.$router.back(-1);
 			}
 		}
