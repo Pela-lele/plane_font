@@ -33,20 +33,20 @@
         </div>
       </router-link>
       <router-link :to="{path:'/wrjgl'}" tag="div">
-        <div class="grxx-list">
+        <div class="grxx-list" v-if="enterType=='qiye'">
           <i class="iconfont icon-wurenji-icon icon-list"></i>
           <span>单位成员管理</span>
           <i class="iconfont icon-enter arrow-right"></i>
         </div>
       </router-link>
-      <router-link :to="{path:'/grxxEditInfo'}" tag="div">
+      <router-link :to="{path:'/grxx/grxxEditInfo'}" tag="div">
         <div class="grxx-list">
           <i class="iconfont icon-gerenxinxi icon-list"></i>
           <span>编辑个人信息</span>
           <i class="iconfont icon-enter arrow-right"></i>
         </div>
       </router-link>
-      <router-link :to="{path:'/grxxEditPwd'}" tag="div">
+      <router-link :to="{path:'/grxx/grxxEditPwd'}" tag="div">
         <div class="grxx-list">
           <i class="iconfont icon-xiugaimima icon-list"></i>
           <span>修改密码</span>
@@ -65,11 +65,20 @@
 
   </div>
 </template>
-
+<script>
+  import {mapState} from 'vuex';
+  export default {
+    computed:{
+       ...mapState([
+          'enterType'
+      ]),
+    },
+  }
+</script>
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper{
-    overflow: hidden;
+    // overflow: hidden;
     .person-info{
       text-align: center;
       background: #ffffff;
@@ -103,7 +112,7 @@
       top:152px;
       left: 0;
       right: 0;
-      bottom: 0;
+      // bottom: 0;
       .grxx-list{
         background: #ffffff;
         height: 48px;

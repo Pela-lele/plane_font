@@ -17,7 +17,7 @@
 	      <mt-tab-container-item id="tab-container1" class="tab-item-container">
 		    <div class="list-cell">
 		      	<!-- <div class="list-cell-wrapper"> -->
-		      	<router-link :to="{path:'/fxbbDetail'}" tag="div" class="list-cell-wrapper">
+		      	<router-link :to="{path:'/fxjhList/fxbbDetail',query:{'id':'e792c07883b8459c8482d105faccabd9'}}" tag="div" class="list-cell-wrapper">
 		        	<div class="list-cell-title">
 		        		<span class="list-cell-text">飞行计划审核通过<i class="right-time">2017-08-21 10:54</i></span>
 		        		<span class="list-cell-label">请按规定进行飞行操作</span>

@@ -23,14 +23,15 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 8888,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
         '/mDrone': {
             // target: 'http://10.1.14.65/',
-            target: 'http://10.1.14.57:8080/',
+            target: 'http://10.1.14.59:8080/',
+            // target: 'http://118.31.246.117/',
             changeOrigin: true,
             pathRewrite: {
                 '^/mDrone': '/mDrone'

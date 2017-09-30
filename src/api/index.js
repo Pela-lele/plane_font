@@ -5,6 +5,7 @@ import axios from "axios";
 import qs from "qs";
 import router from "../router";
 
+import { Indicator, Toast } from 'mint-ui';
 var Axios = axios.create({
   baseURL: "/",
   timeout: 10000,
@@ -12,34 +13,37 @@ var Axios = axios.create({
   withCredentials: true, // 是否允许带cookie这些
   headers: {
     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    // "Content-Type": "application/json"
   }
 });
 
 Axios.interceptors.request.use(function(config){
-	// Do something before request is sent 
-	console.log(config)
-	if (config.method === "post") {
+	// Do something before request is sent
+	Indicator.open();
+	if (config.method === "post" && !(config.data instanceof FormData)) {
 		config.data = qs.stringify(config.data);
-		// config.data = JSON.stringify(config.data)
 	}
 	return config;
 }, function (error) {
-	// Do something with request error 
-	alert("error");
-	return Promise.reject(error);	
+	// Do something with request error
+	Toast("error");
+	Indicator.close();
+	return Promise.reject(error);
 })
 
 Axios.interceptors.response.use(function (response) {
-	// Do something with response data 
+	// Do something with response data
 	if (response.data && response.data.code !== 0) {
 		// alert("后台报错")
+		Toast("服务器异常")
+		Indicator.close();
 		return Promise.reject(response);
 	}
+	Indicator.close();
 	return response;
 }, function (error) {
-	alert("调用错误")
-	// Do something with response error 
+	Toast("网络或服务器异常")
+	Indicator.close();
+	// Do something with response error
 	return Promise.reject(error);
 });
 export default {

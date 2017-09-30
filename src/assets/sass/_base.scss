@@ -11,10 +11,19 @@ $btn-color:#2196f3;
 .wrapper{
   background: white;
   position: absolute;
+  // position: fixed;
   top:0;
   bottom: 0;
   left: 0;
   right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+    /*平滑滚动*/
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  -ms-overflow-scrolling: touch;
+  -o-overflow-scrolling: touch;
+  overflow-scrolling: touch;
 }
 /*新增设置页面背景为白色*/
 .white-bg{
@@ -106,6 +115,7 @@ $btn-color:#2196f3;
     -webkit-box-flex: 1;
         -ms-flex: 1;
             flex: 1;
+            overflow: hidden;
 }
 .list-cell-value {
     color: #888;
@@ -183,6 +193,22 @@ footer, header, hgroup, menu, nav, section {
 body {
   line-height: 1;
 }
+body {
+  /*ios点击一个链接时产生的半透明灰色背景，设置它为透明色*/
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /*禁止文字自适应大小*/
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+  /*平滑滚动*/
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  -ms-overflow-scrolling: touch;
+  -o-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
 ol, ul {
   list-style: none;
 }
@@ -248,10 +274,19 @@ input[type=range]::-webkit-slider-thumb {
   -o-appearance: none;
   appearance: none;
 }
+.container{
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
 //底部固定按钮,用于新增
 .common-footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   height: 48px;
   width: 100%;
@@ -285,6 +320,21 @@ input[type=range]::-webkit-slider-thumb {
     border-radius: 5px;
     margin: 0 auto;
   }
+  .footer-red-btn{
+    width: 80%;
+    height: 38px;
+    line-height: 38px;
+    color: #fff;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 0 auto;
+    background: #e51c23;
+    margin-top: 20px;
+
+
+  }
 }
 //填写表单信息页及详情页样式
 .group {
@@ -314,7 +364,7 @@ input[type=range]::-webkit-slider-thumb {
         border-bottom: 0 none;
       }
       .input-box {
-        padding-right: 20px;
+        padding-right: 22px;
         height: 48px;
         line-height: 48px;
         color: $theme-color;
@@ -363,7 +413,7 @@ input[type=range]::-webkit-slider-thumb {
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 12px 10px;
     background: #e51c23;
     color: white;
@@ -424,6 +474,32 @@ input[type=range]::-webkit-slider-thumb {
   top:12px;
   right: 10px;
   color: $theme-color;
+}
+//拍照/上传图片的样式，含"+",已选中的图片的样式
+.add-style{
+  font-size: 32px;
+  width: 20px;
+  position: absolute;
+  top:12px;
+  right: 14px;
+  color: $theme-color;
+}
+.choose-pic{
+  position: absolute;
+  top: 13px;
+  right: -10px;
+  opacity: 0;
+}
+.choosen-pic{
+  text-align: center;
+  padding: 10px 0;
+  img{
+    margin: 0 auto;
+    height: auto;
+    width:300px;
+    max-height: 300px;
+    border: 1px dashed $border-color;
+  }
 }
 
 

@@ -22,19 +22,24 @@
     <div class="common-footer" @click="submit">
       <span class="common-footer-btn">确定</span>
     </div>
+    <noData v-if="pager.total == 0"></noData>
   </div>
 </template>
 
 <script>
-  import bus from '@/assets/eventBus';
-  import api from '@/api/API';
-
+  import {mapState, mapMutations} from 'vuex'
+  import api from '@/api/API'
+  import noData from '@/components/noData.vue'
 
   export default {
+    components:{
+      noData
+    },
     data() {
       return {
         selectedItem: "",
         selected:"",
+        proId:"",
         datas: [],
         topStatus: '',
         wrapperHeight: 0,
@@ -47,27 +52,34 @@
         },
       }
     },
+    computed:{
+      ...mapState([
+        'wrjgl'
+      ]),
+
+    },
     methods:{
+      ...mapMutations([
+        'RECORD_WRJGLPRO'
+      ]),
       _initPage() {
         var self = this;
         this.loadData().then(function(res){
-          self.wrapperHeight = document.documentElement.clientHeight - self.$refs.wrapper.getBoundingClientRect().top;
+          self.wrapperHeight = document.documentElement.clientHeight - self.$refs.wrapper.getBoundingClientRect().top-"48";
         })
 
       },
       loadData() {
         var self = this;
         var xhr = api.getDronemList({
-          params: {
             "type":1,
             "page.pageNo":self.pager.pageNo,
             "page.pageSize":self.pager.pageSize
-          }
         }).then(function(res){
           var resData = res.data;
           if(resData && resData.code == 0){
             var data = resData.aaData;
-            var total = self.pager.total = resDate.iTotalDisplayRecords;
+            var total = self.pager.total = resData.iTotalDisplayRecords;
             self.datas = self.datas.concat(data);
             if(self.pager.pageNo * self.pager.pageSize >= self.pager.total){
               self.allLoaded = true;
@@ -79,7 +91,6 @@
         return xhr;
       },
       loadTop() {
-        console.log("loadTop")
         var self = this;
         this.pager.pageNo = 1;
         this.datas = [];
@@ -88,31 +99,27 @@
       },
 
       loadBottom() {
-        console.log("loadBottom");
         var self = this;
         this.pager.pageNo++;
         this.loadData();
         this.$refs.loadmore.onBottomLoaded();
 
       },
-//      getData(){
-//          var _this = this;
-//        this.$ajax.get("/mDrone/dronem/list.action",{params: { 'type': '1' }}).then(function (res) {
-//          console.log(res.data.data);
-//          _this.datas = res.data.data;
-//        })
-//      },
-//      getSelecItem(item){
-//          this.selectedItem = item.droneName;
-//      },
-    submit (){
-      bus.$emit("productor",this.selectedItem);
-      this.$router.back(-1);
-    }
-
+      getSelecItem(item){
+          this.selectedItem = item.droneName;
+          this.proId = item.droneMId;
+          console.log(this.proId );
+      },
+      submit (){
+        this.RECORD_WRJGLPRO({"pro":this.selectedItem,"proId":this.proId});
+        console.log(this.proId);
+        this.$router.back(-1);
+      }
     },
-    mounted(){
+    created(){
       this._initPage();
+      this.selectedItem = this.wrjgl.choosePro;
+      this.proId = this.wrjgl.parentId;
     }
 
   }
@@ -143,82 +150,4 @@
 
   }
 </style>
-
-<!--<template>-->
-  <!--<div class="wrapper">-->
-    <!--<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px','overflow':'scroll' }">-->
-      <!--<mt-loadmore :top-method="loadTop"  @top-status-change="handleTopChange"  :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">-->
-        <!--<ul class="page-loadmore-list">-->
-          <!--<li v-for="item in list" class="page-loadmore-listitem">{{ item }}</li>-->
-        <!--</ul>-->
-      <!--</mt-loadmore>-->
-    <!--</div>-->
-  <!--</div>-->
-
-<!--</template>-->
-
-<!--<style scoped lang="scss" type="text/scss">-->
-
-
-<!--</style>-->
-
-<!--<script>-->
-  <!--export default {-->
-    <!--data() {-->
-      <!--return {-->
-        <!--list: [],-->
-        <!--topStatus: '',-->
-        <!--wrapperHeight: 0,-->
-        <!--allLoaded: false,-->
-        <!--bottomStatus: '',-->
-      <!--};-->
-    <!--},-->
-
-    <!--methods: {-->
-      <!--handleTopChange(status) {-->
-        <!--this.topStatus = status;-->
-      <!--},-->
-      <!--handleBottomChange(status) {-->
-        <!--this.bottomStatus = status;-->
-        <!--console.log(status);-->
-      <!--},-->
-      <!--loadTop() {-->
-        <!--setTimeout(() => {-->
-          <!--let firstValue = this.list[0];-->
-          <!--for (let i = 1; i <= 10; i++) {-->
-            <!--this.list.unshift(firstValue - i);-->
-          <!--}-->
-          <!--this.$refs.loadmore.onTopLoaded();-->
-        <!--}, 1500);-->
-      <!--},-->
-
-      <!--loadBottom() {-->
-          <!--console.log(123);-->
-        <!--setTimeout(() => {-->
-          <!--let lastValue = this.list[this.list.length - 1];-->
-          <!--if (lastValue < 60) {-->
-            <!--for (let i = 1; i <= 10; i++) {-->
-              <!--this.list.push(lastValue + i);-->
-            <!--}-->
-          <!--} else {-->
-            <!--this.allLoaded = true;-->
-            <!--console.log("我是有底线的");-->
-          <!--}-->
-          <!--this.$refs.loadmore.onBottomLoaded();-->
-        <!--}, 1500);-->
-      <!--}-->
-
-    <!--},-->
-
-
-    <!--created() {-->
-      <!--for (let i = 1; i <= 20; i++) {-->
-        <!--this.list.push(i);-->
-      <!--}-->
-    <!--},-->
-    <!--mounted() {-->
-      <!--this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;-->
-    <!--}-->
-  <!--};-->
-<!--</script>-->
 

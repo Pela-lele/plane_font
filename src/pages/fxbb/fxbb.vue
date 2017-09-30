@@ -2,16 +2,17 @@
 <!--飞行报备-->
     <div class="wrapper">
     	<!-- <mt-header fixed title="无人机"></mt-header> -->
+    	<div class="container">
     	<div class="group">
     		<label>飞行证书</label>
     		<!-- <ul class="selection-list"> -->
-    		<router-link :to="{path:'/fxzsList'}" tag="ul" class="selection-list">
-	    		<template v-if="Object.keys(formData.fxzsObj).length>0">
-	    			<li class="selection" v-for="(item, key, index) in formData.fxzsObj">
+    		<router-link :to="{path:'/fxbb/fxzsList'}" tag="ul" class="selection-list">
+	    		<template v-if="fxbbForm.licenseList && fxbbForm.licenseList.length>0">
+	    			<li class="selection" v-for="(item, index) in fxbbForm.licenseList">
 		       			<div class="input-box">
-		       				<span>{{item.name}}</span>
+		       				<span>{{item.licenseSn}}</span>
 		       			</div>
-		       			<i class="iconfont icon-add" v-if="index == Object.keys(formData.fxzsObj).length-1"></i>
+		       			<i class="iconfont icon-add" v-if="index == fxbbForm.licenseList.length-1"></i>
 		       		</li>
 	    		</template>
 	    		<template v-else>
@@ -19,22 +20,19 @@
 		       			<i class="iconfont icon-add"></i>
 		       		</li>
 	    		</template>
-	       		<!-- <li class="selection">
-	       			<i class="iconfont icon-add"></i>
-	       		</li> -->
 	       	</router-link>
 	       	<!-- </ul> -->
 	    </div>
 	    <div class="group">
     		<label>无人机</label>
     		<!-- <ul class="selection-list"> -->
-    		<router-link :to="{path:'/wrjxhList'}" tag="ul" class="selection-list">
-    			<template v-if="Object.keys(formData.wrjxhObj).length>0">
-		       		<li class="selection" v-for="(item, key, index) in formData.wrjxhObj">
+    		<router-link :to="{path:'/fxbb/wrjxhList'}" tag="ul" class="selection-list">
+    			<template v-if="fxbbForm.droneList && fxbbForm.droneList.length>0">
+		       		<li class="selection" v-for="(item, index) in fxbbForm.droneList">
 		       			<div class="input-box">
-		       				<span>{{item.name}}</span>
+		       				<span>{{item.droneSn}}</span>
 		       			</div>
-		       			<i class="iconfont icon-add" v-if="index == Object.keys(formData.wrjxhObj).length-1"></i>
+		       			<i class="iconfont icon-add" v-if="index == fxbbForm.droneList.length-1"></i>
 		       		</li>
 		       	</template>
 	    		<template v-else>
@@ -45,13 +43,12 @@
 	       	</router-link>
 	       	<!-- </ul> -->
 	    </div>
-	    <div class="group" v-if="Object.keys(formData.wrjxhObj).length>0">
+	    <div class="group" v-if="fxbbForm.droneList">
 	    	<label>架数</label>
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<!-- <input type="text" placeholder="请输入架数"/> -->
-	       				<span>{{Object.keys(formData.wrjxhObj).length}}架</span>
+	       				<span>{{fxbbForm.droneList.length}}架</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -79,48 +76,46 @@
 	    <div class="group">
 	    	<label>飞行区域</label>
        		<ul class="selection-list">
-	       		<li class="selection" @click="goMapPage('area')">
+	       		<li class="selection" @click="goMapPage()">
 	       		<!-- <router-link :to="{path:'/map/area'}" tag="li" class="selection"> -->
 	       			<div class="input-box">
-	       				<span>{{flightArea.laititude == ""||flightArea.longitude == "" ? "请选择飞行区域" : flightArea.address}}</span>
+	       				<span>{{!fxbbForm.flightArea ? "请选择飞行区域" : fxbbForm.flightArea.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
 	       		<!-- </router-link> -->
 	       		</li>
 	       	</ul>
 	    </div>
-	    <div class="group">
+	    <!-- <div class="group">
 	    	<label>起飞点</label>
-       		<ul class="selection-list">
+	           		<ul class="selection-list">
 	       		<li class="selection" @click="goMapPage('start')">
-	       		<!-- <router-link :to="{path:'/map/start'}" tag="li" class="selection"> -->
 	       			<div class="input-box">
 	       				<span>{{flightStartLocation.address == "" ? "请选择起飞点" : flightStartLocation.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
-	       		<!-- </router-link> -->
 	       		</li>
 	       	</ul>
 	    </div>
 	    <div class="group">
 	    	<label>降落点</label>
-       		<ul class="selection-list">
+	           		<ul class="selection-list">
 	       		<li class="selection" @click="goMapPage('end')">
-	       		<!-- <router-link :to="{path:'/map/end'}" tag="li" class="selection"> -->
 	       			<div class="input-box">
 	       				<span>{{flightEndLocation.address == "" ? "请选择降落点" : flightEndLocation.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
-	       		<!-- </router-link> -->
 	       		</li>
 	       	</ul>
-	    </div>
+	    </div> -->
 	    <div class="group">
 	    	<label>飞行高度</label>
        		<ul class="selection-list">
-	       		<li class="selection">
+	       		<li class="selection" @click="isShowpicker = true">
 	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入飞行高度" v-model="formData.flightHeight"/>
+	       				<span>{{formData.flightHeight[0] || "请选择飞行高度"}}</span>
+	       				<!-- <input type="hidden" placeholder="请输入飞行高度" v-model="formData.flightHeight"/> -->
+	       				 <!-- name="flightHeight" v-validate="'required'" -->
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -142,7 +137,8 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<input type="text" placeholder="请输入联系电话" v-model="formData.telephone"/>
+	       				<input type="text" placeholder="请输入联系电话" name="contactPhone" v-model="formData.telephone" v-validate="'required|phone'"/>
+	       				 <!-- v-validate="'required|phone'" -->
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -151,60 +147,64 @@
 	    	<a @click="submitForm" class="sumitBtn">提交</a>
 	    </div>
 	    <mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
+	    <popup-picker :show.sync="isShowpicker" :show-cell="false" title="飞行高度" :data="[['20', '40', '60', '80', '100', '120']]" v-model="formData.flightHeight"></popup-picker>
+	    </div>
 	    <router-view></router-view>
     </div>
     
 </template>
 <script>
-	import bus from '@/assets/eventBus';
-	import { Datetime, Group, XButton } from 'vux'
+	// import bus from '@/assets/eventBus';
+	import { Datetime, Group, PopupPicker } from 'vux';
+	import {mapState, mapMutations} from 'vuex';
 	import { Toast } from 'mint-ui';
 	import api from '@/api/API.js';
-	// import fxzsList from "./fxzsList.vue";
+	import {dateFormat} from '@/utils';
 	export default {
 		components: {
 			Datetime,
 			Group,
-			XButton,
-			Toast
+			Toast,
+			PopupPicker
 		},
 		data() {
 			return {
 				sheetVisible: false,//飞行用途选框显隐
-				actions: [],//飞行用途选择
+				isShowpicker:false,//飞行高度选择
+				actions: [{
+			        name: '拍摄风景',
+			        value:1,
+			        method: this.setFxyt
+			    }, {
+			        name: '环境监测',
+			        value:2,
+			        method: this.setFxyt
+			    }],//飞行用途选择
 				formData:{
 					telephone:"",//联系电话
 					flightPurpose:"",//飞行用途
-					startTime: "2017-09-20 15:30",
-					endTime: "2017-09-23 15:30",
-					fxzsObj:{},
-					wrjxhObj:{},
-					flightHeight:""//飞行高度
+					startTime: "",
+					endTime: "",
+					flightHeight:[]//飞行高度
 					
-				},
-				flightArea: {
-					"address":"",
-					"laititude": "",
-			        "longitude": "",
-			        "radius": 0
-				},
-				flightStartLocation:{
-					"address":"",
-					"longitude":"",
-					"laititude":""
-				},
-				flightEndLocation:{
-					"address":"",
-					"longitude":"",
-					"laititude":""
 				}
 			}
 		},
-		
+		computed:{
+             ...mapState([
+                'fxbbForm'
+            ]),
+             
+        },
 		methods: {
+			...mapMutations([
+            	'DELETE_FXBBFORM'
+            ]),
 			openTimepicker(e,typeTime) {
 				var self = this;
-				// console.log(arguments)
+				var now = new Date();
+				var startDate = dateFormat(now,"YYYY-MM-DD");
+				var startDate = dateFormat(now,"YYYY-MM-DD");
 				this.$vux.datetime.show({
 			        cancelText: '取消',
 			        confirmText: '确定',
@@ -212,143 +212,116 @@
 			        yearRow: "{value}年",
 			        monthRow: "{value}月",
 			        dayRow: "{value}日",
-			        value: '2017-05-20 18',
+			        // value: '2017-05-20 18',
+			        startDate: startDate,
 			        onConfirm (val) {
-			          self.formData[typeTime] = val;
+			          self.formData[typeTime] = val+":00";
 			        }
 			      })
 			},
 			setFxyt(val) {
-				this.formData.flightPurpose = val.name;	
+				this.formData.flightPurpose = val.name;
 			},
 			submitForm() {
 				var self = this;
-				var data = {
-				    "licenseIds": "1,2,3",
-				    "droneIds": "3,2,1",
-				    "reportRecord.flightArea": JSON.stringify({
-				        "laititude": "118.364545",
-				        "longitude": "32.544654",
-				        "radius": "500",
-				        "address": "中国江苏省南京市建邺区云龙山路88号"
-				    }),
-				    "reportRecord.flightStartLocation": JSON.stringify({
-				        "laititude": "118.364545",
-				        "longitude": "32.544654",
-				        "address": "中国江苏省南京市建邺区云龙山路88号"
-				    }),
-				    "reportRecord.flightEndLocation": JSON.stringify({
-				        "laititude": "118.364545",
-				        "longitude": "32.544654",
-				        "address": "中国江苏省南京市建邺区云龙山路88号"
-				    }),
-				    "reportRecord.flightHeight": "500",
-				    "reportRecord.flightStartTime": "2017-09-01 12:00:00",
-				    "reportRecord.flightEndTime": "2017-09-01 13:00:00",
-				    "reportRecord.flightPurpose": "拍摄风景",
-				    "reportRecord.telephone": "18888888888"
-				};
-				api.saveReportrecord(data).then(function(res){
-					var resData = res.data;
-					if(resData && resData.code==0){
-						self.$router.replace("/")
+				if(this.fxbbForm.licenseList.length == 0){
+					Toast("请选择飞行证书");
+					return;
+				}
+				if(this.fxbbForm.droneList.length == 0){
+					Toast("请选择无人机");
+					return;
+				}
+				if(!this.formData.startTime){
+					Toast("请选择开始时间");
+					return;
+				}
+				if(!this.formData.endTime){
+					Toast("请选择结束时间");
+					return;
+				}
+				if(!this.fxbbForm.flightArea){
+					Toast("请选择飞行区域");
+					return;
+				}
+				if(this.formData.flightHeight.length == 0){
+					Toast("请选择飞行高度");
+					return;
+				}
+				if(!this.formData.flightPurpose){
+					Toast("请选择飞行用途");
+					return;
+				}
+				if(this.formData.endTime<this.formData.startTime){
+					Toast("结束时间不能小于开始时间");
+				}
+				this.$validator.validateAll().then(function(flag){
+					if(flag){
+						//提交表单
+						var data = self.getFormData();
+						api.saveReportrecord(data).then(function(res){
+							var resData = res.data;
+							if(resData && resData.code==0){
+								self.$router.replace("/index")
+							}
+						})
+					}else{
+						var ers = self.errors.all();
+						if(ers.length>0){
+							Toast(ers[0]);
+						}
 					}
 				})
-				/*this.$ajax.post("/mDrone/app/reportrecord/save.action",data).then(function(res){
-					var resData = res.data;
-					if(resData && resData.code==0){
-						this.$router.replace("/")
-					}
-				})*/
-				// this.$router.replace("/")
 			},
-			goMapPage(pageType) {
-				if(pageType == "area"){
-					if(!this.formData.startTime){
-						Toast('请选择开始时间');
-					}else if(!this.formData.endTime){
-						Toast('请选择结束时间');
-					}else{
-						this.$router.push({
-							path: "/map/area",
-							query: {
-								"beginTime":this.formData.startTime,
-								"endTime":this.formData.endTime
-							}
-						})	
-					}
-					
+			getFormData() {
+				var licenseIds = Array.from(this.fxbbForm.licenseList, function(item){
+					return item.licenseId;
+				});
+				var droneIds = Array.from(this.fxbbForm.droneList, function(item){
+					return item.droneId;
+				});
+				
+				var data = {
+				    "licenseIds": licenseIds.join(","),
+				    "droneIds": droneIds.join(","),
+				    "reportRecord.flightArea": JSON.stringify(this.fxbbForm.flightArea),
+				    "reportRecord.flightStartLocation": JSON.stringify(this.fxbbForm.flightStartLocation),
+				    "reportRecord.flightEndLocation": JSON.stringify(this.fxbbForm.flightEndLocation),
+				    "reportRecord.flightHeight": this.formData.flightHeight[0],
+				    "reportRecord.flightStartTime": this.formData.startTime,
+				    "reportRecord.flightEndTime": this.formData.endTime,
+				    "reportRecord.flightPurpose": this.formData.flightPurpose,
+				    "reportRecord.telephone": this.formData.telephone
+				};
+				console.log(data);
+				return data;
+			},
+			goMapPage() {
+				if(!this.formData.startTime){
+					Toast('请选择开始时间');
+				}else if(!this.formData.endTime){
+					Toast('请选择结束时间');
 				}else{
-					if(!this.flightArea.laititude || !this.flightArea.longitude || !this.flightArea.radius){
-						Toast('请选择飞行区域');
-					}else{
-						this.$router.push({
-							path: "/map/"+pageType
-						})
-					}
-					
-					
+					this.$router.push({
+						path: "/fxbb/map",
+						query: {
+							"beginTime":this.formData.startTime,
+							"endTime":this.formData.endTime
+						}
+					})	
 				}
+					
 			}
 		},
-		/*beforeRouteLeave(to, from, next) {
-			console.log(this)
-			console.log(to, from);
+		beforeRouteLeave(to, from, next) {
 			if(to.name == "index"){
 				console.log("销毁");
-				console.log(this.$route)
-				this.$route.meta.keepAlive = false;
-				this.$destroy()
-
+				// this.$destroy()
+				this.DELETE_FXBBFORM();
 			}
 			next();
-		},*/
-		/*beforeRouteEnter(to, from, next){
-			to.meta.keepAlive = true;
-
-			next(function(vm){
-				console.log(vm)
-				vm.destory = false;
-			})
-		},*/
-		mounted(){
-			console.log("mounted");
-			console.log(this);
-			// console.log(this.$store.state.fxbb.doing)
-			var self = this;
-			bus.$on("fxzs",function(selectObj){
-				console.log(selectObj);
-				self.formData.fxzsObj = selectObj;
-			});
-			
-			bus.$on("wrjxh",function(selectObj){
-				self.formData.wrjxhObj = selectObj;
-			});
-			//
-			bus.$on("flightArea",function(flightArea){
-				console.log(flightArea)
-				self.flightArea = flightArea;
-			});
-			bus.$on("flightStartLocation",function(flightStartLocation){
-				console.log(flightStartLocation)
-				self.flightStartLocation = flightStartLocation;
-			});
-			bus.$on("flightEndLocation",function(flightEndLocation){
-				console.log(flightEndLocation)
-				self.flightEndLocation = flightEndLocation;
-			});
-			this.actions = [{
-		        name: '拍摄风景',
-		        value:1,
-		        method: this.setFxyt
-		    }, {
-		        name: '环境监测',
-		        value:2,
-		        method: this.setFxyt
-		    }];
 		},
-		deactivated(){
-			// this.$destroy()
+		created() {
 		}
 	}
 </script>

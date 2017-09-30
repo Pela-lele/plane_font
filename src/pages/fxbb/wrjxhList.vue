@@ -3,14 +3,14 @@
 		<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px','overflow':'scroll' }">
     	<mt-loadmore :top-method="loadTop"  @top-status-change="handleTopChange"  :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore" @autoFill="false">
 		<ul class="mlist">
-			<div class="list-cell" v-for="item in datas" @click="toggleSelect(item)" :class="{selected: selectObj[item.droneMId]}">
+			<div class="list-cell" v-for="item in datas" @click="toggleSelect(item)" :class="{selected: selectObj[item.droneId]}">
 		        <div class="list-cell-wrapper">
 		        	<div class="list-cell-image">
-		        		<img :src="'/mDrone'+item.droneIcon" width="100%" height="100%">
+		        		<img :src="'/mDrone'+item.dronePic" width="100%" height="100%">
 		        	</div>
 		        	<div class="list-cell-title">
-		        		<span class="list-cell-text">{{item.droneName}}</span>
-		        		<span class="list-cell-label">{{item.droneName}}</span>
+		        		<span class="list-cell-text">{{item.droneSn}}</span>
+		        		<span class="list-cell-label">{{item.droneMId}}</span>
 		        	</div>
 
 		        </div>
@@ -26,13 +26,18 @@
 			</div>
 			<a class="submitbtn" @click="submit">完成</a>
 		</div>
+		<noData v-if="pager.total == 0"></noData>
 	</div>
 </template>
 
 <script>
-	import bus from '@/assets/eventBus';
+	import {mapState, mapMutations} from 'vuex'
+	import noData from '@/components/noData.vue'
 	import api from '@/api/API';
 	export default {
+		components:{
+          noData
+      	},
 		data() {
 			return {
 				selectObj: {},
@@ -40,7 +45,7 @@
 				pager:{
 		          pageNo:1,
 		          pageSize:10,
-		          total:0//从后台获取
+		          total:-1//从后台获取
 		        },
 		        topStatus: '',
 		        wrapperHeight: 0,
@@ -49,11 +54,21 @@
 				datas: []
 			}
 		},
+		computed:{
+             ...mapState([
+                'fxbbForm'
+            ]),
+             
+        },
 		created() {
 			var self = this;
 			this._initPage();
+			this._initSelected();
 		},
 		methods: {
+			...mapMutations([
+            	'RECORD_DRONELIST'
+            ]),
 			_initPage() {
 		        var self = this;
 		        this.loadData().then(function(res){
@@ -61,10 +76,16 @@
 		        })
 
 		    },
+		    _initSelected() {
+		    	for(var i=0,len=this.fxbbForm.droneList.length;i<len;i++){
+	        		var temp = this.fxbbForm.droneList[i];
+	        		this.selectObj[temp.droneId] = temp;
+	        		this.selectNum++
+	        	}
+		    },
 		    loadData() {
 		        var self = this;
-		        var xhr = api.getDronemList({
-			        "type":1,
+		        var xhr = api.getUserDroneList({
 					"page.pageNo":self.pager.pageNo,
 	          		"page.pageSize":self.pager.pageSize
 		        }).then(function(res){
@@ -110,20 +131,17 @@
 		    },
 			toggleSelect(item) {
 				var selectObj = this.selectObj;
-				if(this.selectObj[item.droneMId]){
-					this.$delete(this.selectObj,item.droneMId);
+				var id = item.droneId;
+				if(this.selectObj[id]){
+					this.$delete(this.selectObj,id);
 					this.selectNum--;
 				}else{
-					this.$set(this.selectObj,item.droneMId,item);
+					this.$set(this.selectObj,id,item);
 					this.selectNum++
 				}
-
-				
-				console.log(this.selectObj)
 			},
 			submit() {
-				console.log("emit")
-				bus.$emit("wrjxh",this.selectObj);
+				this.RECORD_DRONELIST(Object.values(this.selectObj))
 				this.$router.back(-1);
 			}
 		}

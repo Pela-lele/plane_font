@@ -4,13 +4,13 @@
     <div class="input-info">
 
       <div class="user-type">
-        <router-link :to="{path:'/yhzcPerson'}" tag="div">
+        <router-link :to="{path:'/grxx/yhzcPerson'}" tag="div">
           <div class="person-user">个人用户
             <i class="icon-enter iconfont icon-style"></i>
           </div>
         </router-link>
 
-        <router-link :to="{path:'/yhzcCompany'}" tag="div">
+        <router-link :to="{path:'/grxx/yhzcCompany'}" tag="div">
           <div class="comm-user">企业用户
             <i class="icon-enter iconfont icon-style"></i>
           </div>

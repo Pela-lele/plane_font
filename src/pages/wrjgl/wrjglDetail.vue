@@ -6,7 +6,7 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            大疆创新
+            {{datas.droneCName}}
           </div>
         </li>
       </ul>
@@ -16,7 +16,7 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            PHANTOM4 PRO
+            {{datas.droneMName}}
           </div>
         </li>
       </ul>
@@ -26,75 +26,107 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            S8029345
+            {{datas.droneSn}}
           </div>
         </li>
       </ul>
     </div>
-    <div class="group">
-      <label>保险</label>
-      <ul class="selection-list">
-        <li class="selection">
-          <div class="input-box">
-            第三方责任险
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="group">
-      <label>用途</label>
-      <ul class="selection-list">
-        <li class="selection">
-          <div class="input-box">
-            Ⅳ级
-          </div>
-        </li>
-      </ul>
-    </div>
+
     <div class="common-pic">
-      <img src="../../assets/img/wrj/demo3.jpg">
+      <img :src="'/mDrone'+datas.dronePic">
     </div>
 
-
-    <div class="common-footer-red" @click="deleteSubmit">
-      <span class="footer-red-btn">删除</span>
+    <div class="group" v-show="datas.droneInsurance">
+      <label>保险编号</label>
+      <ul class="selection-list">
+        <li class="selection">
+          <div class="input-box">
+            {{datas.droneInsurance}}
+          </div>
+        </li>
+      </ul>
     </div>
+
+    <div class="common-pic" v-show="datas.droneInsurancePic">
+      <img :src="'/mDrone'+datas.droneInsurancePic">
+    </div>
+
+    <div class="common-absolute-footer">
+      <span class="absolute-footer-btn" @click="pageToEdit">编辑</span>
+
+      <span class="footer-red-btn" @click="deleteSubmit">删除</span>
+    </div>
+
+    <!--<div class="common-footer-red" @click="deleteSubmit">-->
+      <!---->
+    <!--</div>-->
   </div>
 
 </template>
 <script>
-  import personTip from '@/assets/img/grxx/personTip.jpg'
+  import api from '@/api/API'
+  import {Toast} from 'mint-ui'
+  import bus from '@/assets/eventBus'
   export default {
     data(){
       return{
-        isShowpicker: false,
-        image:personTip,
-        pwd:"",
+        droneId:"",
+        datas:{},
       }
     },
     methods:{
-      switchStatus() {
-        this.isShowpicker = !this.isShowpicker;
-      },
-      onFileChange(e) {
-        var files = e.target.files || e.dataTransfer.files;
-        if (!files.length)
-          return;
-        this.createImage(files[0]);
-      },
-      createImage(file) {
-        var image = new Image();
-        var reader = new FileReader();
-        var vm = this;
 
-        reader.onload = (e) => {
-          vm.image = e.target.result;
-        };
-        reader.readAsDataURL(file);
+      loadData() {
+        var self = this;
+        var xhr = api.getUserDroneDetail({
+          "drone.droneId":self.droneId,
+        }).then(function(res){
+          var resData = res.data;
+          if(resData && resData.code == 0){
+            self.datas = resData.aaData[0];
+          }
+        })
+        return xhr;
+      },
+      pageToEdit(){
+          this.$router.push({
+              path: '/wrjgl/wrjglDetailEdit',
+              query: {
+                WrjDetail: this.datas
+              }
+        });
+      },
+      deleteDroneInfo() {
+        var self = this;
+        console.log("==="+self.droneId);
+        bus.$emit("deleteDrone",{
+          droneId:self.droneId
+        })
       },
       deleteSubmit(){
-        this.$router.back(-1);
-      }
+          var self = this;
+        api.deleteUserDrone({
+          "drone.droneId":this.datas.droneId
+        }).then(function (res) {
+          if(1 == res){
+            Toast("删除无人机失败！");
+          }else{
+            Toast("成功删除无人机！");
+            //记录删除的数据
+            self.deleteDroneInfo();
+            self.$router.back(-1);
+          }
+        })
+
+      },
+
+    },
+    created(){
+        this.droneId = this.$route.params.droneId;
+        this.loadData();
+    },
+    mounted(){
+
     }
   }
 </script>

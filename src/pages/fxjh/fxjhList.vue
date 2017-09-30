@@ -3,8 +3,8 @@
   <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px','overflow':'scroll' }">
     <mt-loadmore :top-method="loadTop"  @top-status-change="handleTopChange"  :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore" @autoFill="false">
       <ul class="mlist">
-      <router-link :to="{path:'/fxbbDetail'}" tag="div">
-        <div class="list-cell" v-for="item in datas">
+      <router-link :to="{path:'/fxjhList/fxbbDetail',query:{id:item.recordId}}" tag="div" class="list-cell" v-for="item in datas" :key="item.recordId">
+        <!-- <div class="list-cell" v-for="item in datas"> -->
           <div class="list-cell-wrapper">
             <div class="list-cell-image">
               <img src="../../assets/img/wrj/demo3.jpg" width="100%" height="100%">
@@ -16,27 +16,32 @@
 
           </div>
           <i class="list-cell-allow-right iconfont icon-enter"></i>
-        </div>
+        <!-- </div> -->
       </router-link>
       </ul>
     </mt-loadmore>
   </div>
+  <noData v-if="pager.total == 0"></noData>
+  <router-view></router-view>
   </div>
 </template>
 
 <script>
   import bus from '@/assets/eventBus';
   import api from '@/api/API';
+  import noData from '@/components/noData.vue'
   export default {
+    components:{
+      noData
+    },
     data() {
       return {
         pager:{
           pageNo:1,
           pageSize:10,
-          total:0//从后台获取
+          total:-1//从后台获取
         },
         datas:[],//fontColor:"approve""reject"
-        list: [],
         topStatus: '',
         wrapperHeight: 0,
         allLoaded: false,
@@ -51,15 +56,12 @@
             result = "待审核";
             break;
           case 1:
-            result = "审核中";
-            break;
-          case 2:
             result = "已通过";
             break;
-          case 3:
+          case 2:
             result = "已驳回";
             break;
-          case 4:
+          case 3:
             result = "已取消";
             break;
         }
@@ -119,10 +121,36 @@
         this.loadData();
         this.$refs.loadmore.onBottomLoaded();
 
+      },
+      listener() {
+        var self = this;
+        bus.$on("changeStatus",function(obj){
+          var id = obj.id,status = obj.status;
+          self.datas.filter(function(item) {
+            if(item.recordId == id){
+              item.status = status;
+              return item;
+            }
+            
+          });
+        });
+        
+        bus.$on("editFxjh",function(data){
+          var id = data["reportRecord.recordId"];
+          // console.log(id)
+          self.datas.filter(function(item,index) {
+            if(item.recordId == id){
+                self.datas[index] = data;
+                return item;
+            }
+
+          });
+        });
       }
     },
     mounted(){
       this._initPage();
+      this.listener();
       // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
     }
   }

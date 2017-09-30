@@ -1,12 +1,12 @@
 <template>
   <!--个人信息页包含编辑个人信息及修改密码-->
-  <div class="wrapper">
+  <div class="wrapper" v-if="users">
     <div class="group">
       <label>姓名</label>
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            <input type="text"  value="张三"/>
+            <input type="text"  value="" v-model="users.userName" v-validate="'required'" name="name"/>
           </div>
         </li>
       </ul>
@@ -16,7 +16,7 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            <input type="text" value="320882199611281140"/>
+            <input type="text" value="" v-model="users.userIdcard" v-validate="'required|idCard'" name="idCard"/>
           </div>
         </li>
       </ul>
@@ -26,7 +26,7 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            <input type="text" value="15888888888"/>
+            <input type="text" value="" v-model="users.userTelephone" v-validate="'required|phone'" name="telephone"/>
           </div>
         </li>
       </ul>
@@ -36,7 +36,7 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            <input type="text" value="hello@163.com"/>
+            <input type="text" value="hello@163.com" v-model="users.userEmail" v-validate="'required|email'" name="email"/>
           </div>
         </li>
       </ul>
@@ -49,11 +49,11 @@
       </div>
     </div>
 
-    <router-link :to="{path:'/grxx'}" tag="div">
+    <!-- <router-link :to="{path:'/grxx'}" tag="div"> -->
       <div class="common-absolute-footer">
-        <span class="absolute-footer-btn">保存修改</span>
+        <span class="absolute-footer-btn" @click="submit">保存修改</span>
       </div>
-    </router-link>
+    <!-- </router-link> -->
 
 
   </div>
@@ -61,17 +61,71 @@
 </template>
 <script>
   import personTip from '@/assets/img/grxx/personTip.jpg'
+  import api from '@/api/API';
+  import { Toast } from 'mint-ui';
   export default {
     data(){
       return{
         isShowpicker: false,
         image:personTip,
         pwd:"",
+        id:"111",//用户id
+        users:null
       }
     },
     methods:{
-      switchStatus() {
-        this.isShowpicker = !this.isShowpicker;
+      getUserInfo() {
+        var self = this;
+        api.getUsersDetail(self.id).then(function(res){
+          var resData = res.data;
+          if(resData && resData.code == 0 && resData.aaData.length>0){
+            self.users = resData.aaData[0];
+          }
+        })
+      },
+      validate() {
+        var self = this;
+        var promise = new Promise(function(resolve, reject){
+          self.$validator.validateAll().then(function(flag){
+            if(flag){
+              resolve();
+            }else{
+              var ers = self.errors.all();
+              reject(ers[0]);
+            }
+          })
+        });
+        return promise;
+      },
+      submit(){
+        var self = this;
+        var valid = this.validate();
+        valid.then(function(){
+          //提交数据
+          var data = self.getFormData();
+          api.saveUsers(data).then(function(res){
+            var resData = res.data;
+            if(resData == 0){
+              // self.$router.push("/grxx/grxxList")
+              self.$router.back(-1)
+            }
+          })
+          
+        },function(error){
+          Toast(error);
+        })
+      },
+      getFormData() {
+        var data = {
+          "users.userId":this.id,
+          "users.userName": this.users.userName,
+          "users.userRegisterTel": this.users.userRegisterTel,
+          "users.userIdcard": this.users.userIdcard,
+          "users.userTelephone": this.users.userTelephone,
+          "users.userEmail": this.users.userEmail,
+          "users.photoIdcardUrl": "/c/cxx/idcard.jpg"
+        }
+        return data;
       },
       onFileChange(e) {
         var files = e.target.files || e.dataTransfer.files;
@@ -89,6 +143,9 @@
         };
         reader.readAsDataURL(file);
       },
+    },
+    created() {
+      this.getUserInfo();
     }
   }
 </script>

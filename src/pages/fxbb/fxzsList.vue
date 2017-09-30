@@ -1,20 +1,24 @@
 <template>
 	<div class="wrapper">
+		<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px','overflow':'scroll' }">
+    	<mt-loadmore :top-method="loadTop"  @top-status-change="handleTopChange"  :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore" @autoFill="false">
 		<ul class="mlist">
-			<div class="list-cell" v-for="item in datas" @click="toggleSelect(item)" :class="{selected: selectObj[item.id]}">
+			<div class="list-cell" v-for="item in datas" @click="toggleSelect(item)" :class="{selected: selectObj[item.licenseId]}">
 		        <div class="list-cell-wrapper">
 		        	<div class="list-cell-image">
-		        		<img src="../../assets/img/wrj/demo1.jpg" width="100%" height="100%">
+		        		<img :src="'/mDrone'+item.licensePic" width="100%" height="100%">
 		        	</div>
 		        	<div class="list-cell-title">
-		        		<span class="list-cell-text">{{item.name}}</span>
-		        		<span class="list-cell-label">{{item.desc}}</span>
+		        		<span class="list-cell-text">{{item.licenseSn}}</span>
+		        		<!-- <span class="list-cell-label">{{item.droneMId}}</span> -->
 		        	</div>
 
 		        </div>
 		        <i class="list-cell-allow-right iconfont icon-gou"></i>
 		    </div>
 		</ul>
+		</mt-loadmore>
+  		</div>
 		<div class="footer">
 			<div class="selText" v-if="selectNum">
 				<span class="left">已选：</span>
@@ -22,82 +26,121 @@
 			</div>
 			<a class="submitbtn" @click="submit">完成</a>
 		</div>
+		<noData v-if="pager.total == 0"></noData>
 	</div>
 </template>
 
 <script>
-	import bus from '@/assets/eventBus';
+	import {mapState, mapMutations} from 'vuex'
+	import noData from '@/components/noData.vue'
+	import api from '@/api/API';
 	export default {
+		components:{
+          noData
+      	},
 		data() {
 			return {
 				selectObj: {},
 				selectNum: 0,
-				datas: [{
-					id:"1",
-					name: "小红",
-					desc: "CHSKSi"
-				},{
-					id:"2",
-					name: "小黄",
-					desc: "XXXXXX"
-				},{
-					id:"3",
-					name: "小红",
-					desc: "CHSKSi"
-				},{
-					id:"4",
-					name: "小黄",
-					desc: "XXXXXX"
-				},{
-					id:"5",
-					name: "小红",
-					desc: "CHSKSi"
-				},{
-					id:"6",
-					name: "小黄",
-					desc: "XXXXXX"
-				},{
-					id:"7",
-					name: "小红",
-					desc: "CHSKSi"
-				},{
-					id:"8",
-					name: "小黄",
-					desc: "XXXXXX"
-				},{
-					id:"9",
-					name: "小红",
-					desc: "CHSKSi"
-				},{
-					id:"10",
-					name: "小黄",
-					desc: "XXXXXX"
-				},{
-					id:"11",
-					name: "小红",
-					desc: "CHSKSi"
-				},{
-					id:"12",
-					name: "小黄",
-					desc: "XXXXXX"
-				}]
+				pager:{
+		          pageNo:1,
+		          pageSize:10,
+		          total:-1//从后台获取
+		        },
+		        topStatus: '',
+		        wrapperHeight: 0,
+		        allLoaded: false,
+		        bottomStatus: '',
+				datas: []
 			}
 		},
+		computed:{
+             ...mapState([
+                'fxbbForm'
+            ]),
+             
+        },
+        created() {
+        	this._initPage();
+        	this._initSelected();
+        },
 		methods: {
+			...mapMutations([
+            	'RECORD_LICENSELIST'
+            ]),
+            _initPage() {
+		        var self = this;
+		        this.loadData().then(function(res){
+		            self.wrapperHeight = document.documentElement.clientHeight - self.$refs.wrapper.getBoundingClientRect().top-48;
+		        })
+
+		    },
+		    _initSelected() {
+		    	for(var i=0,len=this.fxbbForm.licenseList.length;i<len;i++){
+	        		var temp = this.fxbbForm.licenseList[i];
+	        		this.selectObj[temp.licenseId] = temp;
+	        		this.selectNum++
+	        	}
+		    },
+		    loadData() {
+		        var self = this;
+		        var xhr = api.getUserLicenseList({
+					"page.pageNo":self.pager.pageNo,
+	          		"page.pageSize":self.pager.pageSize
+		        }).then(function(res){
+		          var resDate = res.data;
+		          if(resDate && resDate.code == 0){
+		            var data = resDate.aaData;
+		            var total = self.pager.total = resDate.iTotalDisplayRecords;
+		            self.datas = self.datas.concat(data);
+		            if(self.pager.pageNo * self.pager.pageSize >= self.pager.total){
+		              self.allLoaded = true;
+		            }else{
+		              self.allLoaded = false;
+		            }
+		          }
+		        })
+		        
+		        return xhr;
+		    },
+		    handleTopChange(status) {//drop->loading->pull
+		        this.topStatus = status;
+		        console.log("handleTopChange="+status)
+		    },
+		    handleBottomChange(status) {//drop->pull
+		        this.bottomStatus = status;
+		        console.log("handleBottomChange="+status)
+		    },
+		    loadTop() {
+		        console.log("loadTop")
+		        var self = this;
+		        this.pager.pageNo = 1;
+		        this.datas = [];
+		        this.loadData();
+		        this.$refs.loadmore.onTopLoaded();
+		    },
+
+		    loadBottom() {
+		        console.log("loadBottom");
+		        var self = this;
+		        this.pager.pageNo++;
+		        this.loadData();
+		        this.$refs.loadmore.onBottomLoaded();
+
+		    },
 			toggleSelect(item) {
 				var selectObj = this.selectObj;
-				console.log(item)
-				if(this.selectObj[item.id]){
-					this.$delete(this.selectObj,item.id);
+				var id = item.licenseId;
+				if(this.selectObj[id]){
+					this.$delete(this.selectObj,id);
 					this.selectNum--;
 				}else{
-					this.$set(this.selectObj,item.id,item);
+					this.$set(this.selectObj,id,item);
 					this.selectNum++
 				}
 			},
 			submit() {
-				console.log("emit")
-				bus.$emit("fxzs",this.selectObj);
+				this.RECORD_LICENSELIST(Object.values(this.selectObj))
 				this.$router.back(-1);
 			}
 		}

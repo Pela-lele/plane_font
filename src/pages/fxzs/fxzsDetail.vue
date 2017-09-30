@@ -1,12 +1,12 @@
 <template>
-  <!--飞行证书详情页-->
+  <!--用户无人机证书管理详情页-->
   <div class="wrapper">
     <div class="group">
       <label>证书类型</label>
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            ASFC证书
+            {{datas.licenseName}}
           </div>
         </li>
       </ul>
@@ -16,37 +16,27 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            23543548512
+            {{datas.licenseSn}}
           </div>
         </li>
       </ul>
     </div>
     <div class="group">
-      <label>签证日期</label>
+      <label>签发日期</label>
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            2017-01-23
+            {{datas.issueDate}}
           </div>
         </li>
       </ul>
     </div>
     <div class="group">
-      <label>有效期</label>
+      <label>有效日期</label>
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            2020-01-22
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="group">
-      <label>证书级别</label>
-      <ul class="selection-list">
-        <li class="selection">
-          <div class="input-box">
-            Ⅳ级
+            {{datas.expiryDate}}
           </div>
         </li>
       </ul>
@@ -56,7 +46,7 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            小明
+            {{datas.holderName}}
           </div>
         </li>
       </ul>
@@ -66,44 +56,92 @@
       <ul class="selection-list">
         <li class="selection">
           <div class="input-box">
-            320682199611231140
+            {{datas.holderIdcard}}
           </div>
         </li>
       </ul>
     </div>
-    <div class="common-pic">
-      <img src="../../assets/img/grxx/personTip.jpg">
+
+    <div class="common-pic" v-show="datas.licensePic">
+      <img :src="'/mDrone'+datas.licensePic">
     </div>
 
+    <div class="common-absolute-footer">
+      <span class="absolute-footer-btn" @click="pageToEdit">编辑</span>
 
-    <div class="common-footer-red" @click="deleteSubmit">
-      <span class="footer-red-btn">删除</span>
+      <span class="footer-red-btn" @click="deleteSubmit">删除</span>
     </div>
   </div>
 
 </template>
 <script>
-  import personTip from '@/assets/img/grxx/personTip.jpg'
+  import api from '@/api/API'
+  import {Toast} from 'mint-ui'
+  import bus from '@/assets/eventBus'
   export default {
     data(){
       return{
-        isShowpicker: false,
-        image:personTip,
-        pwd:"",
+        licenseId:"",
+        datas:{},
       }
     },
     methods:{
-      switchStatus() {
-        this.isShowpicker = !this.isShowpicker;
+
+      loadData() {
+        var self = this;
+        var xhr = api.getUserLicenseDetail({
+          "license.licenseId":self.licenseId,
+        }).then(function(res){
+          var resData = res.data;
+          if(resData && resData.code == 0){
+            self.datas = resData.aaData;
+          }
+        })
+        return xhr;
+      },
+      pageToEdit(){
+        this.$router.push({
+          path: '/fxzs/fxzsDetailEdit',
+          query: {
+            fxzsDetail: this.datas
+          }
+        });
+      },
+      deleteLicenseInfo() {
+        var self = this;
+        bus.$emit("deleteLicense",{
+          licenseId:self.licenseId
+        })
       },
       deleteSubmit(){
-        this.$router.back(-1);
-      }
+        var self = this;
+        api.deleteUserLicense({
+          "license.licenseId":this.datas.licenseId
+        }).then(function (res) {
+          if(1 == res){
+            Toast("删除无人机证书失败！");
+          }else{
+            Toast("成功删除无人机证书！");
+            //记录删除的数据
+            self.deleteLicenseInfo();
+            self.$router.back(-1);
+          }
+        })
+
+      },
+
+    },
+    created(){
+      this.licenseId = this.$route.params.licenseId;
+      this.loadData();
+    },
+    mounted(){
+
     }
   }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss">
   @import '../../assets/sass/_base';
   .wrapper {
     overflow-y: auto;
@@ -114,19 +152,21 @@
     left: 0;
     bottom: 0;
     right: 0;
-
-    .border-style{
-      border: 0px;
+    .font-color{
+      color: $theme-color;
     }
     .common-pic{
-      padding: 10px 20px;
       text-align: center;
+      padding-top: 20px;
       img{
         width: 160px;
         height: auto;
+        margin: 0 auto;
       }
     }
-
+    .border-style{
+      border: 0px;
+    }
 
 
   }

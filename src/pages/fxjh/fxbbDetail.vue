@@ -1,13 +1,13 @@
 <template>
 <!--飞行报备-->
-    <div class="wrapper">
+    <div class="wrapper" style="overflow: scroll" v-if="reportRecord">
     	<!-- <mt-header fixed title="无人机"></mt-header> -->
     	<div class="group">
     		<label>飞行证书</label>
     		<ul class="selection-list">
-    			<li class="selection">
+    			<li class="selection" v-for="(item,index) in licenseList">
 	       			<div class="input-box">
-	       				<span>小明  AOPA-CHINA</span>
+	       				<span>{{item.licenseSn}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -15,19 +15,19 @@
 	    <div class="group">
     		<label>无人机</label>
     		<ul class="selection-list">
-    			<li class="selection">
+    			<li class="selection" v-for="(item,index) in droneList">
 	       			<div class="input-box">
-	       				<span>大疆精灵PHANTOM4 PRO</span>
+	       				<span>{{item.droneSn}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
 	    </div>
 	    <div class="group">
-	    	<label>架数</label>
-       		<ul class="selection-list">
-	       		<li class="selection">
+    		<label>架数</label>
+    		<ul class="selection-list">
+    			<li class="selection">
 	       			<div class="input-box">
-	       				<span>2架</span>
+	       				<span>{{droneList.length}}架</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -36,37 +36,9 @@
 	    	<label>飞行区域</label>
        		<ul class="selection-list">
 	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map/area'}" tag="li" class="selection">
+	       		<router-link :to="{path:'/fxjhList/fxbbDetail/mapShow',query:{flightArea:reportRecord.flightArea,flightStartLocation:reportRecord.flightStartLocation,flightEndLocation:reportRecord.flightEndLocation}}" tag="li" class="selection">
 	       			<div class="input-box">
-	       				<span>秦淮区夫子庙</span>
-	       				<i class="iconfont icon-coordinates"></i>
-	       			</div>
-	       		</router-link>
-	       		<!-- </li> -->
-	       	</ul>
-	    </div>
-	    <div class="group">
-	    	<label>起飞点</label>
-       		<ul class="selection-list">
-	       		<!-- <li class="selection"> -->
-	       		<keep-alive>
-	       		<router-link :to="{path:'/map/start'}" tag="li" class="selection">
-	       			<div class="input-box">
-	       				<span>秦淮区夫子庙</span>
-	       				<i class="iconfont icon-coordinates"></i>
-	       			</div>
-	       		</router-link>
-	       	</keep-alive>
-	       		<!-- </li> -->
-	       	</ul>
-	    </div>
-	    <div class="group">
-	    	<label>降落点</label>
-       		<ul class="selection-list">
-	       		<!-- <li class="selection"> -->
-	       		<router-link :to="{path:'/map/end'}" tag="li" class="selection">
-	       			<div class="input-box">
-	       				<span>秦淮区夫子庙</span>
+	       				<span>{{reportRecord.address}}</span>
 	       				<i class="iconfont icon-coordinates"></i>
 	       			</div>
 	       		</router-link>
@@ -78,7 +50,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>500米</span>
+	       				<span>{{reportRecord.flightHeight}}米</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -88,7 +60,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>2017-08-28 09:23:00</span>
+	       				<span>{{reportRecord.flightStartTimeStr}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -98,7 +70,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-						<span>2017-08-28 11:23:00</span>
+						<span>{{reportRecord.flightEndTimeStr}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -108,7 +80,7 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>拍摄风景</span>
+	       				<span>{{reportRecord.flightPurpose}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
@@ -118,41 +90,84 @@
        		<ul class="selection-list">
 	       		<li class="selection">
 	       			<div class="input-box">
-	       				<span>13813487646</span>
+	       				<span>{{reportRecord.telephone}}</span>
 	       			</div>
 	       		</li>
 	       	</ul>
 	    </div>
-	   <!-- <div class="footer">
-	   			<a class="submitbtn" @click="submit">二维码</a>
-	   		</div> -->
-	   		<a class="code" @click="submit"></a>
+
+	    <div class="common-absolute-footer">
+	      <span class="absolute-footer-btn" @click="editSubmit">编辑</span>
+	      <span class="footer-red-btn" @click="cancelSubmit" v-if="reportRecord.status!==3">取消</span>
+	    </div>
+	   	<!-- <div class="common-footer-red" @click="cancelSubmit" v-if="reportRecord.status!==3">
+	   		      <span class="footer-red-btn">取消</span>
+	   		    </div> -->
+
+	   		<a class="code" @click="qrCodePage" :style="{'background-image': reportRecord.qrcode }"></a>
+	   	<router-view></router-view>
     </div>
 
 </template>
 <script>
 	import bus from '@/assets/eventBus';
+	import api from '@/api/API';
+	import { Toast } from 'mint-ui';
 	export default {
 		data() {
 			return {
+				id: "",//记录id
+				reportRecord: null//详细
 			}
 		},
 		methods: {
-			submit() {
-				this.$router.push("/code")
+			getInfo() {
+				var self = this;
+				api.getReportrecordInfo(this.id).then(function(res){
+					var resData = res.data;
+					if(resData && resData.code == 0){
+						self.reportRecord = resData.reportRecord;
+						self.droneList = resData.droneList;
+						self.licenseList = resData.licenseList
+					}
+				})
+			},
+			cancelSubmit() {
+				var self = this;
+				api.cancelReportrecordInfo(this.id).then(function(res){
+					var resData = res.data;
+					if(resData && resData.code == 0){
+						// self.$router.go(0);
+						Toast("操作成功");
+						self.reportRecord.status = 3;
+						self.changeListStatus();
+					}
+				})
+			},
+			editSubmit() {
+				this.$router.push({
+					path:'/fxbbEdit',
+					query:{
+						"reportRecord":this.reportRecord,
+						"droneList":this.droneList,
+						"licenseList":this.licenseList
+					}
+				})
+			},
+			changeListStatus() {
+				var self = this;
+				bus.$emit("changeStatus",{
+					id:self.id,
+					status:3
+				})
+			},
+			qrCodePage() {
+				this.$router.push('/code')
 			}
 		},
-		mounted(){
-			console.log("mounted");
-			var self = this;
-			bus.$on("fxzs",function(selectObj){
-				console.log(selectObj);
-				self.formData.fxzsObj = selectObj;
-			});
-
-			bus.$on("wrjxh",function(selectObj){
-				self.formData.wrjxhObj = selectObj;
-			});
+		created(){
+			this.id = this.$route.query.id;
+			this.getInfo();
 		}
 	}
 </script>
@@ -166,8 +181,8 @@
 			right: 10px;
 			bottom: 10px;
 			display: block;
-			width: 30px;
-			height: 30px;
+			width: 50px;
+			height: 50px;
 			background: url(../../assets/img/code.jpg) no-repeat;
 			background-size: cover;
 			background-position: center;

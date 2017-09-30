@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <ul class="mlist">
-      <router-link :to="{path:'/fxbbjb'}" tag="div">
+      <router-link :to="{path:'/jdjb/fxbbjb'}" tag="div">
         <div class="list-cell" v-for="item in datas" :class="{selected: selectObj[item.id]}">
           <div class="list-cell-wrapper">
             <div class="list-cell-image">

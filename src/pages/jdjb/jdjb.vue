@@ -52,7 +52,7 @@
 				map.panTo(_m.center);
 			},
 			goFxjh() {
-				this.$router.push("/fxjhAroundList")
+				this.$router.push("/jdjb/fxjhAroundList")
 			},
 			initOverlays() {
 

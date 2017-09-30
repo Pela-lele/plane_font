@@ -3,10 +3,11 @@ import Router from 'vue-router'
 
 
 import index from '@/pages/index'
+import first from '@/pages/first'
 
 /*飞行报备*/
 import fxbb from '@/pages/fxbb/fxbb'
-import fxbbDetail from '@/pages/fxbb/fxbbDetail'
+import fxbbEdit from '@/pages/fxbb/fxbbEdit'
 import map from '@/pages/fxbb/map'
 import fxzsList from '@/pages/fxbb/fxzsList'
 import wrjxhList from '@/pages/fxbb/wrjxhList'
@@ -39,8 +40,11 @@ import fxzs from '@/pages/fxzs/fxzs'
 import fxzsAdd from '@/pages/fxzs/fxzsAdd'
 import fxzsSelZs from '@/pages/fxzs/fxzsSelZs'
 import fxzsDetail from '@/pages/fxzs/fxzsDetail'
-/*飞行计划列表*/
+import fxzsDetailEdit from '@/pages/fxzs/fxzsDetailEdit'
+/*飞行计划*/
 import fxjhList from '@/pages/fxjh/fxjhList'
+import fxbbDetail from '@/pages/fxjh/fxbbDetail'
+import mapShow from '@/pages/fxjh/map'
 /*周围的飞行计划列表*/
 
 /*无人机管理*/
@@ -51,6 +55,8 @@ import wrjglProductor from '@/pages/wrjgl/wrjglProductor'
 import wrjglType from '@/pages/wrjgl/wrjglType'
 import wrjglTip from '@/pages/wrjgl/wrjglTip'
 import wrjPicTip from '@/pages/wrjgl/wrjPicTip'
+import wrjglDetailEdit from '@/pages/wrjgl/wrjglDetailEdit'
+
 
 
 
@@ -58,38 +64,73 @@ import wrjPicTip from '@/pages/wrjgl/wrjPicTip'
 Vue.use(Router)
 // 开启debug模式
 Vue.config.debug = true;
-export default new Router({
-  mode: 'history',
-  // base: '/plane/',
+
+var router = new Router({
+  // mode: 'history',
+
+  //keepAlive: true    requireAuth: true
   routes: [
     {
-      path: '/',
+      path: '/index',
       name: 'index',
+      meta: {
+        requireAuth: true  // 路由是否需要登录
+      },
       component: index
-    },{
-    	 path: '/fxbb',
-      	name: 'fxbb',
+    },
+    {
+      path: '/',
+      name: 'first',
+      component: first
+    },
+    {
+       path: '/fxbb',
+        name: 'fxbb',
         meta:{
-          keepAlive: true
+          requireAuth: true
         },
-      	component: fxbb,
+        component: fxbb,
       children:[
-        {path:'fxbbDetail',component:fxbbDetail},
+        {path:'fxzsList',component:fxzsList},
+        {path:'wrjxhList',component:wrjxhList},
+        {path:'map',component:map}
+      ]
+    },
+    {
+      path: '/fxbbEdit',
+        name: 'fxbbEdit',
+        meta:{
+          requireAuth: true
+        },
+        component: fxbbEdit,
+      children:[
+        {path:'fxzsList',component:fxzsList},
+        {path:'wrjxhList',component:wrjxhList},
+        {path:'map',component:map}
       ]
     },
     {
         path: '/tzgg',
         name: 'tzgg',
+        meta:{
+          requireAuth: true
+        },
         component: tzgg,
     },
     {
         path: '/zcggDetail',
         name: 'zcggDetail',
+        meta:{
+          requireAuth: true
+        },
         component: zcggDetail
     },
     {
         path: '/jdjb',
         name: 'jdjb',
+        meta:{
+          requireAuth: true
+        },
         component: jdjb,
       children:[
         {path:'fxbbjb',component:fxbbjb},
@@ -115,51 +156,69 @@ export default new Router({
         {path: 'yhzcPwd', component: yhzcPwd},
       ]
     },{
-      path: '/map/:type',
-      name: 'map',
-      meta:{
-        keepAlive: true
-      },
-      component: map
-    },{
-      path: '/fxzsList',
-        name: 'fxzsList',
-        meta:{
-          keepAlive: true
-        },
-        component: fxzsList
-    },{
-      path: '/wrjxhList',
-        name: 'wrjxhList',
-        meta:{
-          keepAlive: true
-        },
-        component: wrjxhList
-    },{
       path: '/fxzs',
       component: fxzs,
       children:[
-        {path: 'fxzsDetail', component: fxzsDetail},
-        {path: 'fxzsAdd', component: fxzsAdd},
-        {path: 'fxzsSelZs', component: fxzsSelZs},
+        {
+          path: 'fxzsDetail/:licenseId',
+          component: fxzsDetail,
+        },
+        {
+          path: 'fxzsAdd',
+          component: fxzsAdd,
+          children:[
+            {path: 'fxzsSelZs', component: fxzsSelZs}
+          ]
+        },
+        {
+          path:'fxzsDetailEdit',
+          component:fxzsDetailEdit,
+          children:[
+            {path: 'fxzsSelZs', component: fxzsSelZs}
+          ]
+        }
+
       ]
     },{
       path: '/fxjhList',
       name: 'fxjhList',
-      component: fxjhList
+      component: fxjhList,
+      children:[
+        {path:'fxbbDetail',component:fxbbDetail,children:[{path:'mapShow',component:mapShow}]},
+
+      ]
     },{
       path: '/wrjgl',
       name: 'wrjgl',
       component: wrjgl,
       children:[
-        {path:'wrjglDetail',component:wrjglDetail},
-        {path:'wrjglAdd',component:wrjglAdd},
-        {path:'wrjglProductor',component:wrjglProductor},
-        {path:'wrjglType',component:wrjglType},
+        {path:'wrjglDetail/:droneId',component:wrjglDetail},
+        {
+          path:'wrjglAdd',
+          component:wrjglAdd,
+          children:[
+            {path:'wrjglProductor',component:wrjglProductor},
+            {path:'wrjglType',component:wrjglType}
+          ]
+        },
+        // {path:'wrjglProductor',component:wrjglProductor},
+        // {path:'wrjglType',component:wrjglType},
         {path:'wrjglTip',component:wrjglTip},
         {path:'wrjglType',component:wrjglType},
         {path:'wrjPicTip',component:wrjPicTip},
+        {
+          path:'wrjglDetailEdit',
+          component:wrjglDetailEdit,
+          children:[
+            {path:'wrjglProductor',component:wrjglProductor},
+            {path:'wrjglType',component:wrjglType}
+          ]
+        }
       ]
-    }
+    },
+
   ]
 })
+
+
+export default router

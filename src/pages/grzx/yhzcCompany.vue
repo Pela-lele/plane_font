@@ -77,17 +77,22 @@
       <label>营业执照</label>
       <ul class="selection-list">
         <li class="selection">
-        <span class="tips">(请将营业执照放置取景框内)</span>
+          <span class="tips">(请将营业执照放置取景框内)</span>
+          <i class="iconfont add-style icon-addition"></i>
+          <input type="file"  capture="camera" accept="image/jpeg,image/gif,image/jpg,image/png" class="choose-pic" @change="onFileChange">
         </li>
       </ul>
     </div>
-    <div class="pic">
-      <div class="pic-style">
-        <input type="file"  capture="camera" accept="image/jpeg,image/gif,image/jpg,image/png" style="opacity: 0" @change="onFileChange">
-        <i class="icon-zhaoxiangji1 iconfont" v-if="!image"></i>
-        <img :src="image" v-else/>
-      </div>
+    <div class="choosen-pic">
+      <img :src="image">
     </div>
+    <!--<div class="pic">-->
+      <!--<div class="pic-style">-->
+        <!--<input type="file"  capture="camera" accept="image/jpeg,image/gif,image/jpg,image/png" style="opacity: 0" @change="onFileChange">-->
+        <!--<i class="icon-zhaoxiangji1 iconfont" v-if="!image"></i>-->
+        <!--<img :src="image" v-else/>-->
+      <!--</div>-->
+    <!--</div>-->
     <router-link :to="{path:'/grxx'}" tag="div">
     <div class="common-absolute-footer">
       <span class="absolute-footer-btn">完成</span>
@@ -98,12 +103,13 @@
 
 </template>
 <script>
+  import personTip from '../../assets/img/grxx/personTip.jpg'
   export default {
       data(){
           return{
             isShowpicker: false,
             type:"text",
-            image:null,
+            image:personTip,
             pwd:"",
           }
       },
@@ -139,12 +145,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper {
-    background: white;
-    position: absolute;
-    top:0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+   overflow-x: hidden;
     .border-style{
       border: 0px;
     }

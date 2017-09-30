@@ -1,6 +1,7 @@
 <template>
   <!--个人信息-->
   <div class="wrapper">
+    <div class="container">
     <div class="grxx-bg">
       <span>个人中心</span>
     </div>
@@ -22,15 +23,16 @@
         <span class="log-in">登录</span>
         </router-link>
         <div class="res-text">
-          <router-link :to="{path:'/yhzcTel'}" tag="span">
+          <router-link :to="{path:'/grxx/yhzcTel'}" tag="span">
             <span class="text-style">用户注册</span>
           </router-link>
-          <router-link :to="{path:'/yhzcPwd'}" tag="span">
+          <router-link :to="{path:'/grxx/yhzcPwd'}" tag="span">
             <span class="text-style">忘记密码？</span>
           </router-link>
         </div>
       </div>
 
+    </div>
     </div>
     <router-view></router-view>
 
@@ -40,10 +42,11 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import '../../assets/sass/_base';
   .wrapper{
+    background: #e3f3ff;
     .grxx-bg{
     background:url(../../assets/img/grxx/bg.jpg) repeat;
     height: 180px;
-    margin: -8px;
+    /*margin: -8px;*/
     text-align: center;
    span{
      color: white;
@@ -94,8 +97,8 @@
       background: #e3f3ff repeat;
       text-align: center;
       position: absolute;
-      top: 287px;
-      bottom: 0px;
+      top: 301px;
+      // bottom: 0px;
       left: 0px;
       right: 0px;
       .log-in{

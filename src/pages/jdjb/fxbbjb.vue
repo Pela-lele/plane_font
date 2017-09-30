@@ -87,7 +87,7 @@
 	       		</li>
 	       	</ul>
 	    </div>
-      <router-link :to="{path:'/fxbbjbDetail'}" tag="div">
+      <router-link :to="{path:'/jdjb/fxbbjbDetail'}" tag="div">
 	      <div class="common-footer-red"><span class="footer-red-btn">举报</span></div>
       </router-link>
     </div>
